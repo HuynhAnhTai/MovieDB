@@ -1,0 +1,29 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">#5157B6</item>
+        <item name="colorPrimaryDark">#5157B6</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="tabCustomStyle" parent="Widget.Design.TabLayout">
+        <item name="tabGravity">fill</item>
+        <item name="tabMaxWidth">0dp</item>
+        <item name="tabIndicatorColor">#FFFFFF</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabTextAppearance">@style/MyCustomTabTextAppearance</item>
+        <item name="tabSelectedTextColor">#FFFFFF</item>
+        <item name="tabTextColor">#aaa</item>
+    </style>
+
+    <style name="MyCustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textAppearance">@style/TextAppearance.roboto_medium</item>
+        <item name="textAllCaps">true</item>
+    </style>
+    <style name="TextAppearance.roboto_medium" parent="android:TextAppearance">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+</resources>
