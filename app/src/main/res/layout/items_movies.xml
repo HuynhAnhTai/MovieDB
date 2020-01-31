@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:layout_margin="5dp">
 
 
@@ -12,7 +12,9 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,10 +36,10 @@
                 android:id="@+id/tv_name_film_item_movies"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:padding="5dp"
                 android:text="Ameria"
-                android:maxLines="1"
-                android:ellipsize="end"
                 android:textColor="@android:color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,6 +55,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.27" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.25"
+        android:orientation="horizontal" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
