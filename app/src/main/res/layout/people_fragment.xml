@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".peopleScreen.PeopleFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyler_view_people_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="People" />
+        tools:listitem="@layout/items_movies"
+        />
 
 </FrameLayout>

@@ -4,7 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import retrofit2.Retrofit
 
 
-private const val BASE_URL = "https://api.themoviedb.org/3/movie/"
+private const val BASE_URL = "https://api.themoviedb.org/3/"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(APIWorker.gsonConverter)
@@ -13,8 +13,8 @@ private val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .build()
 
-object MoviesAPI {
-    val retrofitService: MoviesService by lazy {
-        retrofit.create(MoviesService::class.java)
+object API {
+    val RETROFIT_SERVICE: APIService by lazy {
+        retrofit.create(APIService::class.java)
     }
 }

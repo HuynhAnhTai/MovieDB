@@ -1,11 +1,10 @@
 package com.example.moviedb.moviesScreen
 
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviedb.model.MoviesTopRatedResponse
-import com.example.moviedb.restAPI.MoviesAPI
+import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,7 +28,7 @@ class MoviesViewModel : ViewModel() {
     private fun getMoviesTopRated() {
         coroutineScope.launch {
             try{
-                var listResult = MoviesAPI.retrofitService.getMoviesTopRated().await()
+                var listResult = API.RETROFIT_SERVICE.getMoviesTopRated().await()
                 _movies.value = listResult
             }
             catch (e: Exception){
