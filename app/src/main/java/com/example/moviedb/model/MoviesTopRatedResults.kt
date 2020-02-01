@@ -1,6 +1,6 @@
 package com.example.moviedb.model
 
-data class Movies(
+data class MoviesTopRatedResults(
     val popularity: Float,
     val vote_count: Long,
     val video: Boolean,

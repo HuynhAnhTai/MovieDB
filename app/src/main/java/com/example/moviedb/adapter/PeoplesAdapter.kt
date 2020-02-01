@@ -3,17 +3,15 @@ package com.example.moviedb.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.moviedb.model.Movies
-import com.example.moviedb.model.Peoples
-import com.example.moviedb.viewHolder.ItemMoviesHolder
-import com.example.moviedb.viewHolder.ItemPeoplessHolder
+import com.example.moviedb.model.PeoplesPopularResults
+import com.example.moviedb.viewHolder.ItemPeoplesHolder
 
-class PeoplesAdapter(val peopleClick: PeoplesClick) : ListAdapter<Peoples, ItemPeoplessHolder>(PeoplesDiffCallBack()){
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemPeoplessHolder {
-        return ItemPeoplessHolder.from(parent)
+class PeoplesAdapter(val peopleClick: PeoplesClick) : ListAdapter<PeoplesPopularResults, ItemPeoplesHolder>(PeoplesDiffCallBack()){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemPeoplesHolder {
+        return ItemPeoplesHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ItemPeoplessHolder, position: Int) {
+    override fun onBindViewHolder(holder: ItemPeoplesHolder, position: Int) {
         var item = getItem(position)
         holder.bind(item)
         holder.itemView.setOnClickListener {
@@ -22,17 +20,17 @@ class PeoplesAdapter(val peopleClick: PeoplesClick) : ListAdapter<Peoples, ItemP
     }
 }
 
-class PeoplesDiffCallBack : DiffUtil.ItemCallback<Peoples>(){
-    override fun areItemsTheSame(oldItem: Peoples, newItem: Peoples): Boolean {
+class PeoplesDiffCallBack : DiffUtil.ItemCallback<PeoplesPopularResults>(){
+    override fun areItemsTheSame(oldItem: PeoplesPopularResults, newItem: PeoplesPopularResults): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Peoples, newItem: Peoples): Boolean {
+    override fun areContentsTheSame(oldItem: PeoplesPopularResults, newItem: PeoplesPopularResults): Boolean {
         return oldItem == newItem
     }
 
 }
 
-class PeoplesClick(val clickListener: (name: String) -> Unit){
-    fun onClick(item: Peoples) = clickListener(item.name)
+class PeoplesClick(val clickListener: (id: Long) -> Unit){
+    fun onClick(item: PeoplesPopularResults) = clickListener(item.id)
 }

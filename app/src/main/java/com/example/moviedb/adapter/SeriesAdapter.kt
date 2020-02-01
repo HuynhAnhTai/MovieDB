@@ -3,10 +3,10 @@ package com.example.moviedb.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.moviedb.model.Series
+import com.example.moviedb.model.SeriesTopRatedResults
 import com.example.moviedb.viewHolder.ItemSeriesHolder
 
-class SeriessAdapter(val seriesClick: SeriesClick) : ListAdapter<Series, ItemSeriesHolder>(SeriesDiffCallBack()){
+class SeriessAdapter(val seriesClick: SeriesClick) : ListAdapter<SeriesTopRatedResults, ItemSeriesHolder>(SeriesDiffCallBack()){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemSeriesHolder {
         return ItemSeriesHolder.from(parent)
     }
@@ -20,17 +20,17 @@ class SeriessAdapter(val seriesClick: SeriesClick) : ListAdapter<Series, ItemSer
     }
 }
 
-class SeriesDiffCallBack : DiffUtil.ItemCallback<Series>(){
-    override fun areItemsTheSame(oldItem: Series, newItem: Series): Boolean {
+class SeriesDiffCallBack : DiffUtil.ItemCallback<SeriesTopRatedResults>(){
+    override fun areItemsTheSame(oldItem: SeriesTopRatedResults, newItem: SeriesTopRatedResults): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Series, newItem: Series): Boolean {
+    override fun areContentsTheSame(oldItem: SeriesTopRatedResults, newItem: SeriesTopRatedResults): Boolean {
         return oldItem == newItem
     }
 
 }
 
 class SeriesClick(val clickListener: (name: String) -> Unit){
-    fun onClick(item: Series) = clickListener(item.name)
+    fun onClick(item: SeriesTopRatedResults) = clickListener(item.name)
 }

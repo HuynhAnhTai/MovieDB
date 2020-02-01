@@ -3,11 +3,10 @@ package com.example.moviedb.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.moviedb.model.Movies
-import com.example.moviedb.model.MoviesTopRatedResponse
+import com.example.moviedb.model.MoviesTopRatedResults
 import com.example.moviedb.viewHolder.ItemMoviesHolder
 
-class MoviesAdapter(val filmClick: MoviesClick) :ListAdapter<Movies,ItemMoviesHolder>(MoviesDiffCallBack()){
+class MoviesAdapter(val filmClick: MoviesClick) :ListAdapter<MoviesTopRatedResults,ItemMoviesHolder>(MoviesDiffCallBack()){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemMoviesHolder {
         return ItemMoviesHolder.from(parent)
     }
@@ -21,17 +20,17 @@ class MoviesAdapter(val filmClick: MoviesClick) :ListAdapter<Movies,ItemMoviesHo
     }
 }
 
-class MoviesDiffCallBack : DiffUtil.ItemCallback<Movies>(){
-    override fun areItemsTheSame(oldItem: Movies, newItem: Movies): Boolean {
+class MoviesDiffCallBack : DiffUtil.ItemCallback<MoviesTopRatedResults>(){
+    override fun areItemsTheSame(oldItem: MoviesTopRatedResults, newItem: MoviesTopRatedResults): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Movies, newItem: Movies): Boolean {
+    override fun areContentsTheSame(oldItem: MoviesTopRatedResults, newItem: MoviesTopRatedResults): Boolean {
         return oldItem == newItem
     }
 
 }
 
 class MoviesClick(val clickListener: (id: Long) -> Unit){
-    fun onClick(item: Movies) = clickListener(item.id)
+    fun onClick(item: MoviesTopRatedResults) = clickListener(item.id)
 }

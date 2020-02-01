@@ -1,6 +1,6 @@
 package com.example.moviedb.model
 
-data class Series(
+data class SeriesTopRatedResults(
     val original_name: String,
     val name: String,
     val vote_count: Long,

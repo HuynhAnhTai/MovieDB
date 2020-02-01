@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -16,6 +17,7 @@ import com.example.moviedb.adapter.MoviesAdapter
 import com.example.moviedb.adapter.MoviesClick
 import com.example.moviedb.adapter.PeoplesAdapter
 import com.example.moviedb.adapter.PeoplesClick
+import com.example.moviedb.beginScreen.BeginFragmentDirections
 
 class PeopleFragment : Fragment() {
     private lateinit var peopleAdapter: PeoplesAdapter
@@ -36,7 +38,7 @@ class PeopleFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyler_view_people_fragment)
 
         peopleAdapter = PeoplesAdapter(PeoplesClick {
-            Toast.makeText(context,it, Toast.LENGTH_LONG).show()
+            this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToDetailInformationPeopleFragment(it))
         })
         recyclerView.adapter = peopleAdapter
 

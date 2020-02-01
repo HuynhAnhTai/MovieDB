@@ -13,14 +13,44 @@
         <ImageView
             android:id="@+id/iv_back_movies_details_movies_fragment"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
             android:src="@drawable/captainamerica"
-            app:layout_constraintBottom_toTopOf="@id/constraint_layout_detail_movies"
+            app:layout_constraintBottom_toTopOf="@id/guideline420"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline420"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <ImageView
+            android:id="@+id/iv_start_off_detal_movies_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_star_big_off"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="15dp"
+            />
+
+
+
+        <ImageView
+            android:id="@+id/iv_start_on_detal_movies_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/btn_star_big_on"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_margin="15dp"
+            android:visibility="gone"
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_layout_detail_movies"
@@ -105,7 +135,8 @@
                 android:id="@+id/view_2_detail_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="10dp"
                 android:background="@android:color/darker_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +144,7 @@
                 />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyler_view_cast_detail_movie_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/view_2_detail_fragment"
@@ -120,6 +152,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/item_cast_movie"
+                android:layout_marginTop="10dp"
                 />
 
             <androidx.constraintlayout.widget.Guideline
@@ -134,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.4" />
+                app:layout_constraintGuide_percent="0.3" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline7"
