@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.adapter.CastMovieAdapter
 import com.example.moviedb.adapter.CasterClick
+import com.example.moviedb.db.MoviesEntity
+import com.example.moviedb.db.getDatabase
 import com.example.moviedb.model.MovieByIdResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_movies_fragment.*
@@ -34,6 +35,8 @@ class DetailMoviesFragment : Fragment() {
     private lateinit var imageViewStarOn: ImageView
 
     private lateinit var adapter: CastMovieAdapter
+
+    private lateinit var moviesEntity: MoviesEntity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,11 +59,15 @@ class DetailMoviesFragment : Fragment() {
         imageViewStarOff.setOnClickListener {
             iv_start_off_detal_movies_fragment.visibility = View.GONE
             iv_start_on_detal_movies_fragment.visibility = View.VISIBLE
+
+            viewModel.insertMovie(moviesEntity)
         }
 
         imageViewStarOn.setOnClickListener {
             iv_start_off_detal_movies_fragment.visibility = View.VISIBLE
             iv_start_on_detal_movies_fragment.visibility = View.GONE
+
+            viewModel.deleteMovie(moviesEntity)
         }
 
         return view
@@ -68,7 +75,7 @@ class DetailMoviesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = DetailMoviesViewModelFactory(DetailMoviesFragmentArgs.fromBundle(arguments!!).id)
+        viewModelFactory = DetailMoviesViewModelFactory(DetailMoviesFragmentArgs.fromBundle(arguments!!).id, context!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailMoviesViewModel::class.java)
         // TODO: Use the ViewModel
 
@@ -83,6 +90,16 @@ class DetailMoviesFragment : Fragment() {
                 if (it.cast.size>0){
                     adapter.submitList(it.cast)
                 }
+            }
+        })
+
+        viewModel.save.observe(viewLifecycleOwner, Observer {
+            if (it.id == DetailMoviesFragmentArgs.fromBundle(arguments!!).id){
+                iv_start_off_detal_movies_fragment.visibility = View.GONE
+                iv_start_on_detal_movies_fragment.visibility = View.VISIBLE
+            }else{
+                iv_start_off_detal_movies_fragment.visibility = View.VISIBLE
+                iv_start_on_detal_movies_fragment.visibility = View.GONE
             }
         })
     }
@@ -104,6 +121,7 @@ class DetailMoviesFragment : Fragment() {
 
         tv_genres_movies_details_fragment.text = genres
         tv_overview_movie_detail_fragment.text = it.overview
-    }
 
+        moviesEntity = MoviesEntity(it.adult, it.backdrop_path, genres, it.id, it.overview, it.poster_path, it.title, it.vote_average)
+    }
 }

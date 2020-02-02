@@ -5,9 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".savedScreen.SavedFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyler_view_save_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Saved" />
+        tools:listitem="@layout/items_movies"
+        />
 
 </FrameLayout>

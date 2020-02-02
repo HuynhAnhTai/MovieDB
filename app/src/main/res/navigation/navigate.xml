@@ -35,12 +35,25 @@
             android:id="@+id/action_beginFragment_to_detailInformationPeopleFragment"
             app:destination="@id/detailInformationPeopleFragment"
             app:popUpTo="@+id/beginFragment" />
+        <action
+            android:id="@+id/action_beginFragment_to_detailSaveFragment"
+            app:destination="@id/detailSaveFragment"
+            app:popUpTo="@+id/beginFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationPeopleFragment"
         android:name="com.example.moviedb.peopleScreen.detailInformationPeople.DetailInformationPeopleFragment"
         android:label="detail_information_people_fragment"
         tools:layout="@layout/detail_information_people_fragment" >
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailSaveFragment"
+        android:name="com.example.moviedb.savedScreen.detailSaveScreen.DetailSaveFragment"
+        android:label="detail_save_fragment"
+        tools:layout="@layout/detail_save_fragment" >
         <argument
             android:name="id"
             app:argType="long" />
