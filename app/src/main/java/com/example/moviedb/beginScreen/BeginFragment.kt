@@ -2,10 +2,11 @@ package com.example.moviedb.beginScreen
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 
 import com.example.moviedb.R
@@ -26,32 +27,36 @@ class BeginFragment : Fragment() {
 
     private lateinit var adapter: PagerAdapter
 
+    private lateinit var toolbar: Toolbar
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view: View = inflater.inflate(R.layout.begin_fragment, container, false)
+
         tabLayout = view.findViewById(R.id.tab_layout_begin_fragment)
         viewPager = view.findViewById(R.id.view_pager_begin_fragment)
+        toolbar = view.findViewById(R.id.tool_bar_begin_fragment)
+
+       toolbar.setOnMenuItemClickListener {
+            when(it.itemId){
+                R.id.menu_search -> {
+
+                    true
+                }
+                else -> {
+                    this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToFilterFragment())
+                    true
+                }
+            }
+       }
 
         adapter = PagerAdapter(childFragmentManager)
 
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
 
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
-        })
         return view
     }
 

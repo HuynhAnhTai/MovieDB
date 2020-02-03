@@ -39,6 +39,9 @@
             android:id="@+id/action_beginFragment_to_detailSaveFragment"
             app:destination="@id/detailSaveFragment"
             app:popUpTo="@+id/beginFragment" />
+        <action
+            android:id="@+id/action_beginFragment_to_filterFragment"
+            app:destination="@id/filterFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationPeopleFragment"
@@ -58,4 +61,9 @@
             android:name="id"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/filterFragment"
+        android:name="com.example.moviedb.filterScreen.FilterFragment"
+        android:label="filter_fragment"
+        tools:layout="@layout/filter_fragment" />
 </navigation>
