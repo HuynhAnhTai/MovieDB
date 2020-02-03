@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.example.moviedb.R
-import com.example.moviedb.model.PersonInfoResponse
+import com.example.moviedb.modelAPI.PersonInfoResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_information_people_fragment.*
 

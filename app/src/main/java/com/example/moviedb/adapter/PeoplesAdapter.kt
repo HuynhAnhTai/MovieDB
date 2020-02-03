@@ -3,7 +3,7 @@ package com.example.moviedb.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.moviedb.model.PeoplesPopularResults
+import com.example.moviedb.modelAPI.PeoplesPopularResults
 import com.example.moviedb.viewHolder.ItemPeoplesHolder
 
 class PeoplesAdapter(val peopleClick: PeoplesClick) : ListAdapter<PeoplesPopularResults, ItemPeoplesHolder>(PeoplesDiffCallBack()){

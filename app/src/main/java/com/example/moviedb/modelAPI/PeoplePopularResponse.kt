@@ -1,4 +1,4 @@
-package com.example.moviedb.model
+package com.example.moviedb.modelAPI
 
 data class PeoplePopularResponse(
     val page: Long,

@@ -24,4 +24,7 @@ interface DAO {
     @Query("select * from FilterEntity where id = :idFilter")
     fun getFilterById(idFilter: Int): FilterEntity
 
+    @Query("select * from FilterEntity")
+    fun getFilter(): LiveData<FilterEntity>
+
 }

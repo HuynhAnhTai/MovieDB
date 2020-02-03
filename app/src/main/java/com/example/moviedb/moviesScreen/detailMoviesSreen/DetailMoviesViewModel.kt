@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
-import com.example.moviedb.model.CreditByIdFilmResponse
-import com.example.moviedb.model.MovieByIdResponse
+import com.example.moviedb.modelAPI.CreditByIdFilmResponse
+import com.example.moviedb.modelAPI.MovieByIdResponse
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.*
 import java.lang.Exception

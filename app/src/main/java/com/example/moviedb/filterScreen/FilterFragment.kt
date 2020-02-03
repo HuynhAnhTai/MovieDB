@@ -123,8 +123,8 @@ class FilterFragment : Fragment() {
 
         tv_to = view.findViewById(R.id.tv_to)
 
-        bt_star_time.setText(dateStart.toString() + "-" + (monthStart + 1) + "-" + yearStart)
-        bt_end_time.setText(dateEnd.toString() + "-" + (monthEnd + 1) + "-" + yearEnd)
+        bt_star_time.setText( yearStart.toString()+ "-" + (monthStart + 1) + "-" + dateStart.toString())
+        bt_end_time.setText( yearEnd.toString()+ "-" + (monthEnd + 1) + "-" + dateEnd.toString())
 
         bt_star_time.setOnClickListener {
             onClickDateTimePicker(bt_star_time)
@@ -267,9 +267,7 @@ class FilterFragment : Fragment() {
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         if(year<=yearEnd && monthOfYear <= monthEnd && dayOfMonth <= dateEnd){
-                            bt_star_time.setText(
-                                dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year
-                            )
+                            bt_star_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
                         }
                     }, yearStart, monthStart, dateStart
                 )
@@ -285,7 +283,7 @@ class FilterFragment : Fragment() {
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         if(year>=yearStart && monthOfYear >= monthStart && dayOfMonth >= dateStart){
-                            bt_end_time.text = dayOfMonth.toString() + "-" + (monthOfYear + 1) + "-" + year
+                            bt_end_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
                         }
                     }, yearEnd, monthEnd, dateEnd
                 )

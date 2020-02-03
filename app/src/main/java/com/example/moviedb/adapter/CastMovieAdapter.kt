@@ -3,7 +3,7 @@ package com.example.moviedb.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.moviedb.model.CastOfFlim
+import com.example.moviedb.modelAPI.CastOfFlim
 import com.example.moviedb.viewHolder.ItemCastMovieHolder
 
 class CastMovieAdapter(val castClick: CasterClick) :ListAdapter<CastOfFlim,ItemCastMovieHolder>(CastDiffCallBack()){

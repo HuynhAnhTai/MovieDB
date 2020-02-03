@@ -15,6 +15,9 @@ import com.example.moviedb.R
 import com.example.moviedb.adapter.MoviesAdapter
 import com.example.moviedb.adapter.MoviesClick
 import com.example.moviedb.beginScreen.BeginFragmentDirections
+import com.example.moviedb.db.FilterEntity
+import com.example.moviedb.modelAPI.MoviesTopRatedResults
+import java.text.SimpleDateFormat
 
 class MoviesFragment : Fragment() {
     private lateinit var moviesAdapter: MoviesAdapter
@@ -23,8 +26,12 @@ class MoviesFragment : Fragment() {
     companion object {
         fun newInstance() = MoviesFragment()
     }
+    private lateinit var viewModelFactory: MoviesViewModelFactory
     private lateinit var viewModel: MoviesViewModel
 
+    private lateinit var filter: FilterEntity
+
+    private var parser = SimpleDateFormat("yyyy-MM-dd")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,16 +54,48 @@ class MoviesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
+        viewModelFactory = MoviesViewModelFactory(context!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
         // TODO: Use the ViewModel
+        viewModel.filter_all.observe(viewLifecycleOwner, Observer {
+            filter = it
+            viewModel.getFilter()
+        })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
-            if(it.total_results>0){
-                if (it.results.size>0) {
-                    moviesAdapter.submitList(it.results)
-                }
+            if(it.size>0){
+                filterMovies(it)
+
             }
         })
+    }
+
+    private fun filterMovies(it: List<MoviesTopRatedResults>) {
+        var temp = listOf<MoviesTopRatedResults>()
+        when(filter.sortBy){
+            "popular"-> temp = it.sortedWith(compareByDescending { it.popularity })
+            "rated"->temp = it.sortedWith(compareByDescending { it.vote_average })
+            "date"->temp = it.sortedWith(compareByDescending { parser.parse(it.release_date) })
+            else->temp = it.sortedWith(compareByDescending { it.title })
+        }
+
+        if(filter.startTime.equals("")){
+            moviesAdapter.submitList(temp)
+        }else{
+            var startTime = parser.parse(filter.startTime)
+            var endTime = parser.parse(filter.endTime)
+
+            var data: MutableList<MoviesTopRatedResults> = ArrayList()
+
+            for (i in temp){
+                var releaseTime = parser.parse(i.release_date)
+                if(startTime<=releaseTime && releaseTime<=endTime){
+                    data.add(i)
+                }
+            }
+            moviesAdapter.submitList(data)
+        }
 
     }
+
 
 }

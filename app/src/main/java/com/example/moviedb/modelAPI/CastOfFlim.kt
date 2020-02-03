@@ -1,4 +1,4 @@
-package com.example.moviedb.model
+package com.example.moviedb.modelAPI
 
 data class CastOfFlim(
     val id: Long,

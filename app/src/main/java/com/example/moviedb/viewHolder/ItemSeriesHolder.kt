@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
-import com.example.moviedb.model.SeriesTopRatedResults
+import com.example.moviedb.modelAPI.SeriesTopRatedResults
 import com.squareup.picasso.Picasso
 
 class ItemSeriesHolder private constructor(view: View): RecyclerView.ViewHolder(view){

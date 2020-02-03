@@ -1,16 +1,19 @@
 package com.example.moviedb.restAPI
 
-import com.example.moviedb.model.*
+import com.example.moviedb.modelAPI.*
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Headers
-import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface APIService {
     @Headers("Content-Type: application/json")
     @GET("movie/top_rated?")
     fun getMoviesTopRated(): Deferred<MoviesTopRatedResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("movie/now_playing?")
+    fun getMoviesNowPlaying(): Deferred<MovieNowPlayingResponse>
 
     @Headers("Content-Type: application/json")
     @GET("tv/top_rated?")

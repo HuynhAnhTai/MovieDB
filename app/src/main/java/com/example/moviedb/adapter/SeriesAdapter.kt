@@ -3,7 +3,7 @@ package com.example.moviedb.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.example.moviedb.model.SeriesTopRatedResults
+import com.example.moviedb.modelAPI.SeriesTopRatedResults
 import com.example.moviedb.viewHolder.ItemSeriesHolder
 
 class SeriessAdapter(val seriesClick: SeriesClick) : ListAdapter<SeriesTopRatedResults, ItemSeriesHolder>(SeriesDiffCallBack()){

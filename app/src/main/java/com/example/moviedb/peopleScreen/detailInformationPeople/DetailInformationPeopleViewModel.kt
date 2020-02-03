@@ -3,9 +3,8 @@ package com.example.moviedb.peopleScreen.detailInformationPeople
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviedb.model.PersonInfoResponse
+import com.example.moviedb.modelAPI.PersonInfoResponse
 import com.example.moviedb.restAPI.API
-import com.example.moviedb.restAPI.APIService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

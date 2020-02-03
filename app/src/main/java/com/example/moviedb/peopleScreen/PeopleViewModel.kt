@@ -3,8 +3,7 @@ package com.example.moviedb.peopleScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviedb.model.MoviesTopRatedResponse
-import com.example.moviedb.model.PeoplePopularResponse
+import com.example.moviedb.modelAPI.PeoplePopularResponse
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

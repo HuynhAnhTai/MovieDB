@@ -3,7 +3,7 @@ package com.example.moviedb.seriesScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviedb.model.SeriesTopRatedResponse
+import com.example.moviedb.modelAPI.SeriesTopRatedResponse
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
