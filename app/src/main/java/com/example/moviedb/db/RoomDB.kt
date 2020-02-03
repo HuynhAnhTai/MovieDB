@@ -5,13 +5,13 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [MoviesEntity::class],version = 2)
+@Database(entities = [MoviesEntity::class, FilterEntity::class],version = 3)
 abstract class MoviesDatabase : RoomDatabase(){
-    abstract val moviesDao: MoviesDAO
+    abstract val dao: DAO
 }
 
 private lateinit var INSTANCE: MoviesDatabase
-fun getDatabase(context: Context):MoviesDatabase{
+fun getDatabaseMovie(context: Context):MoviesDatabase{
     synchronized(MoviesDatabase::class.java){
         if (!::INSTANCE.isInitialized){
             INSTANCE = Room.databaseBuilder(
@@ -24,5 +24,4 @@ fun getDatabase(context: Context):MoviesDatabase{
         }
     }
     return INSTANCE
-
 }

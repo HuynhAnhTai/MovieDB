@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
-interface MoviesDAO {
+interface DAO {
 
     @Query("select * from MoviesEntity")
     fun getMovies(): LiveData<List<MoviesEntity>>
@@ -18,5 +18,10 @@ interface MoviesDAO {
     @Query("delete from MoviesEntity where id = :idMovie")
     fun deleteMoviesById(idMovie: Long)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertFilter(filter: FilterEntity)
+
+    @Query("select * from FilterEntity where id = :idFilter")
+    fun getFilterById(idFilter: Int): FilterEntity
 
 }

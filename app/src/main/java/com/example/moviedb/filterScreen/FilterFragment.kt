@@ -13,9 +13,8 @@ import android.widget.Toast
 import com.example.moviedb.R
 import kotlinx.android.synthetic.main.filter_fragment.*
 import android.app.DatePickerDialog
-import android.text.format.Time
 import android.widget.TextView
-import java.time.Year
+import com.example.moviedb.db.FilterEntity
 import java.util.*
 
 
@@ -25,7 +24,7 @@ class FilterFragment : Fragment() {
     companion object {
         fun newInstance() = FilterFragment()
     }
-
+    private lateinit var viewModelFactory: FilterViewModelFactory
     private lateinit var viewModel: FilterViewModel
 
     private lateinit var radioGroupSort: RadioGroup
@@ -58,6 +57,9 @@ class FilterFragment : Fragment() {
     private var yearEnd: Int = Calendar.getInstance().get(Calendar.YEAR)
     private var monthEnd: Int = Calendar.getInstance().get(Calendar.MONTH)
     private var dateEnd: Int = Calendar.getInstance().get(Calendar.DATE)
+
+    private var sortBy: String = ""
+    private var genres: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -134,23 +136,21 @@ class FilterFragment : Fragment() {
 
         radioGroupSort.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
-                R.id.rb_most_popular_filter_fragment -> Toast.makeText(context, "Most Popular", Toast.LENGTH_LONG).show()
-                R.id.rb_best_rated_filter_fragment -> Toast.makeText(context, "Best rated", Toast.LENGTH_LONG).show()
-                R.id.rb_release_date_filter_fragment -> Toast.makeText(context, "Release date", Toast.LENGTH_LONG).show()
-                else -> Toast.makeText(context, "Alphabetic order", Toast.LENGTH_LONG).show()
+                R.id.rb_most_popular_filter_fragment -> sortBy = "popular"
+                R.id.rb_best_rated_filter_fragment -> sortBy = "rated"
+                R.id.rb_release_date_filter_fragment -> sortBy = "date"
+                else -> sortBy = "order"
             }
         }
 
         radioGroupDates.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
                 R.id.rb_in_theatre_filter_fragment -> {
-                    Toast.makeText(context, "Theatre", Toast.LENGTH_LONG).show()
                     bt_start_time_picker_filter_fragment.visibility = View.GONE
                     bt_end_time_filter_fragment.visibility = View.GONE
                     tv_to.visibility = View.GONE
                 }
                 else -> {
-                    Toast.makeText(context, "Dates", Toast.LENGTH_LONG).show()
                     bt_start_time_picker_filter_fragment.visibility = View.VISIBLE
                     bt_end_time_filter_fragment.visibility = View.VISIBLE
                     tv_to.visibility = View.VISIBLE
@@ -165,15 +165,93 @@ class FilterFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(FilterViewModel::class.java)
+        viewModelFactory = FilterViewModelFactory(context!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FilterViewModel::class.java)
         // TODO: Use the ViewModel
+
+        viewModel.filter.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it.id == 1){
+                loadData(it)
+            }
+        })
+    }
+
+    private fun loadData(it: FilterEntity) {
+        when(it.sortBy){
+            "popular" -> radioGroupSort.check(R.id.rb_most_popular_filter_fragment)
+            "rated" -> radioGroupSort.check(R.id.rb_best_rated_filter_fragment)
+            "date" -> radioGroupSort.check(R.id.rb_release_date_filter_fragment)
+            else -> radioGroupSort.check(R.id.rb_alphabetic_order_filter_fragment)
+        }
+
+        when(it.startTime){
+            ""-> radioGroupDates.check(R.id.rb_in_theatre_filter_fragment)
+            else ->{
+                radioGroupDates.check(R.id.rb_between_two_dates_filter_fragment)
+                bt_star_time.text = it.startTime
+                bt_end_time.text = it.endTime
+            }
+        }
+
+        var genres1 = it.genres.split(",")
+        genres = it.genres
+        if (genres1.contains("action & adventure")){
+            bt_action.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("animation")){
+            bt_animation.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("comedy")){
+            bt_comedy.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("crime")){
+            bt_crime.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("documentary")){
+            bt_document.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("drama")){
+            bt_drama.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("family")){
+            bt_family.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("kids")){
+            bt_kids.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("mystery")){
+            bt_mystery.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("news")){
+            bt_news.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("reality")){
+            bt_reality.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("sci-fi & fantasy")){
+            bt_sci.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("soap")){
+            bt_soap.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("talk")){
+            bt_talk.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("war & politics")){
+            bt_war.setTextColor(resources.getColor(R.color.red))
+        }
+        if (genres1.contains("western")){
+            bt_western.setTextColor(resources.getColor(R.color.red))
+        }
     }
 
     fun onClick(p0: Button) {
         if(p0.currentTextColor == -16185336){
             p0.setTextColor(resources.getColor(R.color.red))
+            genres+=","+p0.text.toString()
         }else{
             p0.setTextColor(resources.getColor(R.color.black))
+            genres = genres.replace(","+p0.text,"")
         }
     }
 
@@ -214,6 +292,26 @@ class FilterFragment : Fragment() {
                 datePickerDialog.show()
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        var startTime: String = ""
+        var endTime: String = ""
+
+        when(rg_dates_filter_fragment.checkedRadioButtonId){
+            R.id.rb_in_theatre_filter_fragment -> {
+                startTime = ""
+                endTime = ""
+            }
+            else -> {
+                startTime = bt_star_time.text.toString()
+                endTime = bt_end_time.text.toString()
+            }
+        }
+        viewModel.insertFilter(sortBy, startTime, endTime,genres)
+
     }
 
 }

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Movie DB</string>
-    <string name="action_adventure"><![CDATA[ACTION & ADVENTURE]]></string>
-    <string name="sci_fi_fantasy"><![CDATA[SCI-FI & FANTASY]]></string>
+    <string name="action_adventure"><![CDATA[action & adventure]]></string>
+    <string name="sci_fi_fantasy"><![CDATA[sci-fi & fantasy]]></string>
     <string name="war_politics"><![CDATA[war & politics]]></string>
 </resources>

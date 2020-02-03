@@ -16,7 +16,6 @@ import com.example.moviedb.R
 import com.example.moviedb.adapter.CastMovieAdapter
 import com.example.moviedb.adapter.CasterClick
 import com.example.moviedb.db.MoviesEntity
-import com.example.moviedb.db.getDatabase
 import com.example.moviedb.model.MovieByIdResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_movies_fragment.*

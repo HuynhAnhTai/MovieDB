@@ -5,8 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviedb.db.MoviesEntity
-import com.example.moviedb.db.getDatabase
-import com.example.moviedb.model.CastOfFlim
+import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.model.CreditByIdFilmResponse
 import com.example.moviedb.model.MovieByIdResponse
 import com.example.moviedb.restAPI.API
@@ -67,7 +66,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
         coroutineScope.launch {
             var value1 = MoviesEntity(false,"","",-1,"","","",0F)
             withContext(Dispatchers.IO){
-                value1 = getDatabase(context).moviesDao.getMovieById(id)
+                value1 = getDatabaseMovie(context).dao.getMovieById(id)
             }
             if (value1==null){
                 _save.value =  MoviesEntity(false,"","",-1,"","","",0F)
@@ -81,18 +80,18 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     fun insertMovie(moviesEntity: MoviesEntity){
         coroutineScope.launch {
             withContext(Dispatchers.IO){
-                getDatabase(context!!).moviesDao.insertMovies(moviesEntity)
+                getDatabaseMovie(context!!).dao.insertMovies(moviesEntity)
             }
-
         }
     }
 
     fun deleteMovie(moviesEntity: MoviesEntity){
         coroutineScope.launch {
             withContext(Dispatchers.IO){
-                getDatabase(context!!).moviesDao.deleteMoviesById(moviesEntity.id)
+                getDatabaseMovie(context!!).dao.deleteMoviesById(moviesEntity.id)
             }
         }
+
     }
 
     override fun onCleared() {
