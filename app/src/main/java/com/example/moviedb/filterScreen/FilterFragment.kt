@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioGroup
-import android.widget.Toast
 
 import com.example.moviedb.R
 import kotlinx.android.synthetic.main.filter_fragment.*
@@ -37,13 +36,11 @@ class FilterFragment : Fragment() {
     private lateinit var bt_document: Button
     private lateinit var bt_drama: Button
     private lateinit var bt_family: Button
-    private lateinit var bt_kids: Button
+    private lateinit var bt_adventure: Button
     private lateinit var bt_mystery: Button
-    private lateinit var bt_news: Button
-    private lateinit var bt_reality: Button
+    private lateinit var bt_thriller: Button
+    private lateinit var bt_horror: Button
     private lateinit var bt_sci: Button
-    private lateinit var bt_soap: Button
-    private lateinit var bt_talk: Button
     private lateinit var bt_war: Button
     private lateinit var bt_western: Button
     private lateinit var bt_star_time: Button
@@ -94,26 +91,20 @@ class FilterFragment : Fragment() {
         bt_family = view.findViewById(R.id.bt_family_filter_fragment)
         bt_family.setOnClickListener {onClick(bt_family)}
 
-        bt_kids = view.findViewById(R.id.bt_kids_filter_fragment)
-        bt_kids.setOnClickListener {onClick(bt_kids)}
+        bt_adventure = view.findViewById(R.id.bt_adventure_filter_fragment)
+        bt_adventure.setOnClickListener {onClick(bt_adventure)}
 
         bt_mystery = view.findViewById(R.id.bt_mystery_filter_fragment)
         bt_mystery.setOnClickListener {onClick(bt_mystery)}
 
-        bt_news = view.findViewById(R.id.bt_news_filter_fragment)
-        bt_news.setOnClickListener {onClick(bt_news)}
+        bt_thriller = view.findViewById(R.id.bt_thriller_filter_fragment)
+        bt_thriller.setOnClickListener {onClick(bt_thriller)}
 
-        bt_reality = view.findViewById(R.id.bt_reality_filter_fragment)
-        bt_reality.setOnClickListener {onClick(bt_reality)}
+        bt_horror = view.findViewById(R.id.bt_horror_filter_fragment)
+        bt_horror.setOnClickListener {onClick(bt_horror)}
 
         bt_sci = view.findViewById(R.id.bt_sci_filter_fragment)
         bt_sci.setOnClickListener {onClick(bt_sci)}
-
-        bt_soap = view.findViewById(R.id.bt_soap_filter_fragment)
-        bt_soap.setOnClickListener {onClick(bt_soap)}
-
-        bt_talk = view.findViewById(R.id.bt_talk_filter_fragment)
-        bt_talk.setOnClickListener {onClick(bt_talk)}
 
         bt_war = view.findViewById(R.id.bt_war_filter_fragment)
         bt_war.setOnClickListener {onClick(bt_war)}
@@ -189,58 +180,63 @@ class FilterFragment : Fragment() {
             else ->{
                 radioGroupDates.check(R.id.rb_between_two_dates_filter_fragment)
                 bt_star_time.text = it.startTime
+
+                var data = it.startTime.split("-")
+                yearStart = data.get(0).toInt()
+                monthStart = data.get(1).toInt()
+                dateStart= data.get(2).toInt()
+
                 bt_end_time.text = it.endTime
+
+                data = it.endTime.split("-")
+                yearEnd = data.get(0).toInt()
+                monthEnd = data.get(1).toInt()
+                dateEnd= data.get(2).toInt()
             }
         }
 
         var genres1 = it.genres.split(",")
         genres = it.genres
-        if (genres1.contains("action & adventure")){
+        if (genres1.contains("28")){
             bt_action.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("animation")){
+        if (genres1.contains("16")){
             bt_animation.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("comedy")){
+        if (genres1.contains("35")){
             bt_comedy.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("crime")){
+        if (genres1.contains("80")){
             bt_crime.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("documentary")){
+        if (genres1.contains("99")){
             bt_document.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("drama")){
+        if (genres1.contains("18")){
             bt_drama.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("family")){
+        if (genres1.contains("10751")){
             bt_family.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("kids")){
-            bt_kids.setTextColor(resources.getColor(R.color.red))
+        if (genres1.contains("12")){
+            bt_adventure.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("mystery")){
+        if (genres1.contains("9648")){
             bt_mystery.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("news")){
-            bt_news.setTextColor(resources.getColor(R.color.red))
+        if (genres1.contains("53")){
+            bt_thriller.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("reality")){
-            bt_reality.setTextColor(resources.getColor(R.color.red))
+        if (genres1.contains("27")){
+            bt_horror.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("sci-fi & fantasy")){
+        if (genres1.contains("878")){
             bt_sci.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("soap")){
-            bt_soap.setTextColor(resources.getColor(R.color.red))
-        }
-        if (genres1.contains("talk")){
-            bt_talk.setTextColor(resources.getColor(R.color.red))
-        }
-        if (genres1.contains("war & politics")){
+        if (genres1.contains("10752")){
             bt_war.setTextColor(resources.getColor(R.color.red))
         }
-        if (genres1.contains("western")){
+        if (genres1.contains("37")){
             bt_western.setTextColor(resources.getColor(R.color.red))
         }
     }
@@ -248,10 +244,10 @@ class FilterFragment : Fragment() {
     fun onClick(p0: Button) {
         if(p0.currentTextColor == -16185336){
             p0.setTextColor(resources.getColor(R.color.red))
-            genres+=","+p0.text.toString()
+            genres+=","+p0.hint.toString()
         }else{
             p0.setTextColor(resources.getColor(R.color.black))
-            genres = genres.replace(","+p0.text,"")
+            genres = genres.replace(","+p0.hint,"")
         }
     }
 
@@ -266,8 +262,11 @@ class FilterFragment : Fragment() {
 
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        if(year<=yearEnd && monthOfYear <= monthEnd && dayOfMonth <= dateEnd){
+                        if(year<=yearEnd && (monthOfYear+1) <= monthEnd && dayOfMonth <= dateEnd){
                             bt_star_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                            yearStart = year
+                            monthStart = monthOfYear
+                            dateStart = dayOfMonth
                         }
                     }, yearStart, monthStart, dateStart
                 )
@@ -282,8 +281,11 @@ class FilterFragment : Fragment() {
 
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        if(year>=yearStart && monthOfYear >= monthStart && dayOfMonth >= dateStart){
+                        if(year>=yearStart && (monthOfYear+1) >= monthStart && dayOfMonth >= dateStart){
                             bt_end_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                            yearEnd = year
+                            monthEnd = monthOfYear
+                            dateEnd = dayOfMonth
                         }
                     }, yearEnd, monthEnd, dateEnd
                 )

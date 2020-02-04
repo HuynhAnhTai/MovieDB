@@ -2,6 +2,7 @@ package com.example.moviedb.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.moviedb.modelAPI.Genres
 
 @Dao
 interface DAO {
@@ -26,5 +27,11 @@ interface DAO {
 
     @Query("select * from FilterEntity")
     fun getFilter(): LiveData<FilterEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertGenres(genres: ArrayList<GenresEntity>)
+
+    @Query("select * from GenresEntity")
+    fun getGenres(): LiveData<List<GenresEntity>>
 
 }

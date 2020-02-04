@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 
@@ -18,7 +19,7 @@ class BeginFragment : Fragment() {
     companion object {
         fun newInstance() = BeginFragment()
     }
-
+    private lateinit var viewModelFactory: BeginViewModelFactory
     private lateinit var viewModel: BeginViewModel
 
     private lateinit var tabLayout: TabLayout
@@ -62,8 +63,14 @@ class BeginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(BeginViewModel::class.java)
+        viewModelFactory = BeginViewModelFactory(context!!)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BeginViewModel::class.java)
         // TODO: Use the ViewModel
+//        viewModel.genresDB.observe(viewLifecycleOwner, Observer {
+//            if (it.size>0){
+//                Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
+//            }
+//        })
     }
 
 }

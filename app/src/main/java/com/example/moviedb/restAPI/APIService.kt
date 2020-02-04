@@ -5,23 +5,24 @@ import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface APIService {
     @Headers("Content-Type: application/json")
     @GET("movie/top_rated?")
-    fun getMoviesTopRated(): Deferred<MoviesTopRatedResponse>
+    fun getMoviesTopRated(@Query("page") page: Int): Deferred<MoviesTopRatedResponse>
 
     @Headers("Content-Type: application/json")
     @GET("movie/now_playing?")
-    fun getMoviesNowPlaying(): Deferred<MovieNowPlayingResponse>
+    fun getMoviesNowPlaying(@Query("page") page: Int): Deferred<MovieNowPlayingResponse>
 
     @Headers("Content-Type: application/json")
     @GET("tv/top_rated?")
-    fun getSeriesTopRated(): Deferred<SeriesTopRatedResponse>
+    fun getSeriesTopRated(@Query("page") page: Int): Deferred<SeriesTopRatedResponse>
 
     @Headers("Content-Type: application/json")
     @GET("person/popular?")
-    fun getPeoplePopular(): Deferred<PeoplePopularResponse>
+    fun getPeoplePopular(@Query("page") page: Int): Deferred<PeoplePopularResponse>
 
     @Headers("Content-Type: application/json")
     @GET("movie/{movie_id}?")
@@ -35,5 +36,7 @@ interface APIService {
     @GET("person/{person_id}?")
     fun getInfoPeople(@Path ("person_id") id: Long):Deferred<PersonInfoResponse>
 
-
+    @Headers("Content-Type: application/json")
+    @GET("genre/movie/list?")
+    fun getAllGenre():Deferred<GenresReponse>
 }

@@ -171,8 +171,17 @@
                 android:id="@+id/bt_action_filter_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/action_adventure"
+                android:text="action"
                 android:textColor="@color/black"
+                android:hint="28"
+                />
+            <Button
+                android:id="@+id/bt_adventure_filter_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="adventure"
+                android:textColor="@color/black"
+                android:hint="12"
                 />
             <Button
                 android:id="@+id/bt_animation_filter_fragment"
@@ -180,6 +189,7 @@
                 android:layout_height="wrap_content"
                 android:text="animation"
                 android:textColor="@color/black"
+                android:hint="16"
                 />
             <Button
                 android:id="@+id/bt_comedy_filter_fragment"
@@ -187,6 +197,7 @@
                 android:layout_height="wrap_content"
                 android:text="comedy"
                 android:textColor="@color/black"
+                android:hint="35"
                 />
             <Button
                 android:id="@+id/bt_crime_filter_fragment"
@@ -194,6 +205,7 @@
                 android:layout_height="wrap_content"
                 android:text="crime"
                 android:textColor="@color/black"
+                android:hint="80"
                 />
             <Button
                 android:id="@+id/bt_documentary_filter_fragment"
@@ -201,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:text="documentary"
                 android:textColor="@color/black"
+                android:hint="99"
                 />
             <Button
                 android:id="@+id/bt_drama_filter_fragment"
@@ -208,6 +221,7 @@
                 android:layout_height="wrap_content"
                 android:text="drama"
                 android:textColor="@color/black"
+                android:hint="18"
                 />
             <Button
                 android:id="@+id/bt_family_filter_fragment"
@@ -215,13 +229,7 @@
                 android:layout_height="wrap_content"
                 android:text="family"
                 android:textColor="@color/black"
-                />
-            <Button
-                android:id="@+id/bt_kids_filter_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="kids"
-                android:textColor="@color/black"
+                android:hint="10751"
                 />
             <Button
                 android:id="@+id/bt_mystery_filter_fragment"
@@ -229,20 +237,16 @@
                 android:layout_height="wrap_content"
                 android:text="mystery"
                 android:textColor="@color/black"
+                android:hint="9648"
                 />
+
             <Button
-                android:id="@+id/bt_news_filter_fragment"
+                android:id="@+id/bt_horror_filter_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="news"
+                android:text="horror"
                 android:textColor="@color/black"
-                />
-            <Button
-                android:id="@+id/bt_reality_filter_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="reality"
-                android:textColor="@color/black"
+                android:hint="27"
                 />
             <Button
                 android:id="@+id/bt_sci_filter_fragment"
@@ -250,20 +254,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/sci_fi_fantasy"
                 android:textColor="@color/black"
+                android:hint="878"
                 />
             <Button
-                android:id="@+id/bt_soap_filter_fragment"
+                android:id="@+id/bt_thriller_filter_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="soap"
+                android:text="thriller"
                 android:textColor="@color/black"
-                />
-            <Button
-                android:id="@+id/bt_talk_filter_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="talk"
-                android:textColor="@color/black"
+                android:hint="53"
                 />
             <Button
                 android:id="@+id/bt_war_filter_fragment"
@@ -271,6 +270,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/war_politics"
                 android:textColor="@color/black"
+                android:hint="10752"
                 />
             <Button
                 android:id="@+id/bt_western_filter_fragment"
@@ -278,6 +278,7 @@
                 android:layout_height="wrap_content"
                 android:text="western"
                 android:textColor="@color/black"
+                android:hint="37"
                 />
 
         </com.nex3z.flowlayout.FlowLayout>

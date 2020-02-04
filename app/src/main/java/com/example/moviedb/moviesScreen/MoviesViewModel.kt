@@ -25,7 +25,10 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
     val filter_all: LiveData<FilterEntity>
         get() = getDatabaseMovie(context).dao.getFilter()
 
-    private lateinit var filter: FilterEntity
+    private var filter: FilterEntity = FilterEntity(0,"","","","")
+
+    var moviePage : Int =0
+    var movieTheaterPage : Int =0
     init {
         getFilter()
     }
@@ -36,8 +39,10 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
                 filter = getDatabaseMovie(context).dao.getFilterById(1)
             }
             if (filter == null || filter.startTime == ""){
+                movieTheaterPage++
                 getMoviesTheatre()
             }else{
+                moviePage++
                 getMoviesTopRated()
             }
         }
@@ -46,7 +51,7 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
     private fun getMoviesTopRated() {
         coroutineScope.launch {
             try{
-                var listResult = API.RETROFIT_SERVICE.getMoviesTopRated().await()
+                var listResult = API.RETROFIT_SERVICE.getMoviesTopRated(moviePage).await()
                 _movies.value = listResult.results
             }
             catch (e: Exception){
@@ -58,7 +63,7 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
     private fun getMoviesTheatre() {
         coroutineScope.launch {
             try{
-                var listResult = API.RETROFIT_SERVICE.getMoviesNowPlaying().await()
+                var listResult = API.RETROFIT_SERVICE.getMoviesNowPlaying(movieTheaterPage).await()
                 _movies.value = listResult.results
             }
             catch (e: Exception){

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,6 +17,7 @@ import com.example.moviedb.adapter.MoviesAdapter
 import com.example.moviedb.adapter.MoviesClick
 import com.example.moviedb.adapter.SeriesClick
 import com.example.moviedb.adapter.SeriessAdapter
+import com.example.moviedb.modelAPI.SeriesTopRatedResults
 
 class SeriesFragment : Fragment() {
     private lateinit var seriesAdapter: SeriessAdapter
@@ -25,12 +27,18 @@ class SeriesFragment : Fragment() {
     }
 
     private lateinit var viewModel: SeriesViewModel
+    private var data: MutableList<SeriesTopRatedResults> = ArrayList()
+
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view: View = inflater.inflate(R.layout.series_fragment, container, false)
+
+        progressBar = view.findViewById(R.id.progressBar_series)
+
         recyclerView = view.findViewById(R.id.recyler_view_series_fragment)
 
         seriesAdapter = SeriessAdapter(SeriesClick {
@@ -39,6 +47,17 @@ class SeriesFragment : Fragment() {
         recyclerView.adapter = seriesAdapter
 
         recyclerView.layoutManager = GridLayoutManager(context,3)
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (! recyclerView!!.canScrollVertically(1)){ //1 for down
+                    progressBar.visibility = View.VISIBLE
+                    viewModel.getSeriesTopRated()
+                }
+            }
+        })
 
         return view
     }
@@ -50,7 +69,11 @@ class SeriesFragment : Fragment() {
         viewModel.series.observe(viewLifecycleOwner, Observer {
             if(it.total_results>0){
                 if (it.results.size>0) {
-                    seriesAdapter.submitList(it.results)
+                    for (i in it.results){
+                        data.add(i)
+                    }
+                    seriesAdapter.submitList(data)
+                    progressBar.visibility = View.GONE
                 }
             }
         })

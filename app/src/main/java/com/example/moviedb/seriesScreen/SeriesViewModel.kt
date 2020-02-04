@@ -23,11 +23,12 @@ class SeriesViewModel : ViewModel() {
     init {
         getSeriesTopRated()
     }
-
-    private fun getSeriesTopRated() {
+    var serviecePage: Int = 0
+    fun getSeriesTopRated() {
         coroutineScope.launch {
             try{
-                var listResult = API.RETROFIT_SERVICE.getSeriesTopRated().await()
+                serviecePage++
+                var listResult = API.RETROFIT_SERVICE.getSeriesTopRated(serviecePage).await()
                 _series.value = listResult
             }
             catch (e: Exception){

@@ -16,6 +16,7 @@ class PeopleViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private val _people = MutableLiveData<PeoplePopularResponse>()
+    var peoplePage : Int =0
 
     val people: LiveData<PeoplePopularResponse>
         get() = _people
@@ -24,10 +25,11 @@ class PeopleViewModel : ViewModel() {
         getPeoplePopular()
     }
 
-    private fun getPeoplePopular() {
+    fun getPeoplePopular() {
         coroutineScope.launch {
             try{
-                var listResult = API.RETROFIT_SERVICE.getPeoplePopular().await()
+                peoplePage++
+                var listResult = API.RETROFIT_SERVICE.getPeoplePopular(peoplePage).await()
                 _people.value = listResult
             }
             catch (e: Exception){
