@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".savedScreen.SavedFragment">
+    tools:context=".screen.savedScreen.SavedFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyler_view_save_fragment"

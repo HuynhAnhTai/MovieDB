@@ -41,12 +41,11 @@ class FilterViewModel(private var context: Context) : ViewModel() {
                 var filter = FilterEntity(1, sortBy, startTime, endTime, genres)
                 getDatabaseMovie(context).dao.insertFilter(filter)
             }
-            viewModel.cancel()
         }
-
     }
 
     override fun onCleared() {
         super.onCleared()
+        viewModel.cancel()
     }
 }

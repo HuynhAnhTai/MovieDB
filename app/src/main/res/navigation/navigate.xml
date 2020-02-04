@@ -42,6 +42,9 @@
         <action
             android:id="@+id/action_beginFragment_to_filterFragment"
             app:destination="@id/filterFragment" />
+        <action
+            android:id="@+id/action_beginFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationPeopleFragment"
@@ -54,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailSaveFragment"
-        android:name="com.example.moviedb.savedScreen.detailSaveScreen.DetailSaveFragment"
+        android:name="com.example.moviedb.screen.savedScreen.detailSaveScreen.DetailSaveFragment"
         android:label="detail_save_fragment"
         tools:layout="@layout/detail_save_fragment" >
         <argument
@@ -66,4 +69,13 @@
         android:name="com.example.moviedb.filterScreen.FilterFragment"
         android:label="filter_fragment"
         tools:layout="@layout/filter_fragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.moviedb.screen.searchSreen.SearchFragment"
+        android:label="search_fragment"
+        tools:layout="@layout/search_fragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailMoviesFragment"
+            app:destination="@id/detailMoviesFragment" />
+    </fragment>
 </navigation>

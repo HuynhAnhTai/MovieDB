@@ -1,4 +1,4 @@
-package com.example.moviedb.savedScreen.detailSaveScreen
+package com.example.moviedb.screen.savedScreen.detailSaveScreen
 
 import android.content.Context
 import androidx.lifecycle.LiveData

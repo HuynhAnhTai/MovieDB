@@ -39,4 +39,8 @@ interface APIService {
     @Headers("Content-Type: application/json")
     @GET("genre/movie/list?")
     fun getAllGenre():Deferred<GenresReponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("search/movie")
+    fun getSearchFlim(@Query("query") query: String):Deferred<MoviesTopRatedResponse>
 }

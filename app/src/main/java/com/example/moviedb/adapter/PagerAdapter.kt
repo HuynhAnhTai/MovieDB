@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.moviedb.moviesScreen.MoviesFragment
 import com.example.moviedb.peopleScreen.PeopleFragment
-import com.example.moviedb.savedScreen.SavedFragment
+import com.example.moviedb.screen.savedScreen.SavedFragment
 import com.example.moviedb.seriesScreen.SeriesFragment
 
 class PagerAdapter (fm: FragmentManager):FragmentPagerAdapter(fm){

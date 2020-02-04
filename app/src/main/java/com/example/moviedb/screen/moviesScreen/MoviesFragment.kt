@@ -6,13 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 
 import com.example.moviedb.R
 import com.example.moviedb.adapter.MoviesAdapter
@@ -39,6 +37,8 @@ class MoviesFragment : Fragment() {
     private var parser = SimpleDateFormat("yyyy-MM-dd")
 
     private var dataPrimary: MutableList<MoviesTopRatedResults> = ArrayList()
+
+    private var hasScroll: Boolean = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,8 +63,8 @@ class MoviesFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (! recyclerView!!.canScrollVertically(1)){ //1 for down
-                    progressBar.visibility = View.VISIBLE
-                    viewModel.getFilter()
+                        progressBar.visibility = View.VISIBLE
+                        viewModel.getFilter()
                 }
             }
         })
@@ -76,10 +76,12 @@ class MoviesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModelFactory = MoviesViewModelFactory(context!!)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
+
         // TODO: Use the ViewModel
         viewModel.filter_all.observe(viewLifecycleOwner, Observer {
             if (it!=null) {
                 filter = it
+                dataPrimary = ArrayList<MoviesTopRatedResults>()
                 viewModel.getFilter()
             }
         })
@@ -92,36 +94,46 @@ class MoviesFragment : Fragment() {
 
     private fun filterMovies(it: List<MoviesTopRatedResults>) {
 
-        var temp = listOf<MoviesTopRatedResults>()
-        when(filter.sortBy){
-            "popular"-> temp = it.sortedWith(compareByDescending { it.popularity })
-            "rated"->temp = it.sortedWith(compareByDescending { it.vote_average })
-            "date"->temp = it.sortedWith(compareByDescending { parser.parse(it.release_date) })
-            else->temp = it.sortedWith(compareBy { it.title })
-        }
+
         var genres = filter.genres.split(",")
 
         var temp2 = ArrayList<MoviesTopRatedResults>()
 
         if (genres.size>1) {
-            for (i in temp) {
+            for (i in it) {
                 for (t in i.genre_ids) {
                     if (t.toString() in genres) {
                         temp2.add(i)
+                        dataPrimary.add(i)
                         break
                     }
                 }
             }
+
+            for (i in dataPrimary) {
+                var flag: Int = 0
+                for (t in i.genre_ids) {
+                    if (t.toString() in genres) {
+                        flag = 1
+                        break
+                    }
+                }
+                if (flag == 0){
+                    dataPrimary.remove(i)
+                }
+            }
         }else{
-            for (i in temp){
+            for (i in it){
                 temp2.add(i)
             }
         }
-        if(filter.startTime.equals("")){
+        if(filter.startTime.equals("now")){
             for (i in temp2){
-                dataPrimary.add(i)
+                if (!dataPrimary.contains(i)){
+                    dataPrimary.add(i)
+                }
             }
-            moviesAdapter.submitList(dataPrimary)
+            moviesAdapter.submitList(filter(dataPrimary))
         }else{
             var startTime = parser.parse(filter.startTime)
             var endTime = parser.parse(filter.endTime)
@@ -136,12 +148,28 @@ class MoviesFragment : Fragment() {
             }
 
             for (i in data){
-                dataPrimary.add(i)
+                if(!dataPrimary.contains(i)){
+                    dataPrimary.add(i)
+                }
             }
-            moviesAdapter.submitList(dataPrimary)
+            moviesAdapter.submitList(filter(dataPrimary))
         }
         progressBar.visibility = View.GONE
     }
 
+    private fun filter(it: List<MoviesTopRatedResults>) : List<MoviesTopRatedResults>{
+        when(filter.sortBy){
+            "popular"-> return it.sortedWith(compareByDescending { it.popularity })
+            "rated"-> return it.sortedWith(compareByDescending { it.vote_average })
+            "date"-> return it.sortedWith(compareByDescending { parser.parse(it.release_date) })
+            else-> return it.sortedWith(compareBy { it.title })
+        }
+    }
 
+    override fun onStop() {
+        super.onStop()
+        hasScroll = false
+        viewModel.moviePage = 0
+        viewModel.movieTheaterPage = 0
+    }
 }

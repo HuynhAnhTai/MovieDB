@@ -43,7 +43,7 @@ class BeginFragment : Fragment() {
        toolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_search -> {
-
+                    this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToSearchFragment())
                     true
                 }
                 else -> {

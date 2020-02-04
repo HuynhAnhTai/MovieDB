@@ -57,6 +57,7 @@ class FilterFragment : Fragment() {
 
     private var sortBy: String = ""
     private var genres: String = ""
+    private var check: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -127,10 +128,22 @@ class FilterFragment : Fragment() {
 
         radioGroupSort.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
-                R.id.rb_most_popular_filter_fragment -> sortBy = "popular"
-                R.id.rb_best_rated_filter_fragment -> sortBy = "rated"
-                R.id.rb_release_date_filter_fragment -> sortBy = "date"
-                else -> sortBy = "order"
+                R.id.rb_most_popular_filter_fragment -> {
+                    sortBy = "popular"
+                    insertFilter()
+                }
+                R.id.rb_best_rated_filter_fragment ->{
+                    sortBy = "rated"
+                    insertFilter()
+                }
+                R.id.rb_release_date_filter_fragment -> {
+                    sortBy = "date"
+                    insertFilter()
+                }
+                else -> {
+                    sortBy = "order"
+                    insertFilter()
+                }
             }
         }
 
@@ -140,11 +153,17 @@ class FilterFragment : Fragment() {
                     bt_start_time_picker_filter_fragment.visibility = View.GONE
                     bt_end_time_filter_fragment.visibility = View.GONE
                     tv_to.visibility = View.GONE
+                    if(!check){
+                        check = true
+                    }else{
+                        insertFilter()
+                    }
                 }
                 else -> {
                     bt_start_time_picker_filter_fragment.visibility = View.VISIBLE
                     bt_end_time_filter_fragment.visibility = View.VISIBLE
                     tv_to.visibility = View.VISIBLE
+                  //  insertFilter()
                 }
             }
         }
@@ -175,8 +194,12 @@ class FilterFragment : Fragment() {
             else -> radioGroupSort.check(R.id.rb_alphabetic_order_filter_fragment)
         }
 
+        sortBy = it.sortBy
+
         when(it.startTime){
-            ""-> radioGroupDates.check(R.id.rb_in_theatre_filter_fragment)
+            "now"-> {
+                radioGroupDates.check(R.id.rb_in_theatre_filter_fragment)
+            }
             else ->{
                 radioGroupDates.check(R.id.rb_between_two_dates_filter_fragment)
                 bt_star_time.text = it.startTime
@@ -245,10 +268,13 @@ class FilterFragment : Fragment() {
         if(p0.currentTextColor == -16185336){
             p0.setTextColor(resources.getColor(R.color.red))
             genres+=","+p0.hint.toString()
+            insertFilter()
         }else{
             p0.setTextColor(resources.getColor(R.color.black))
             genres = genres.replace(","+p0.hint,"")
+            insertFilter()
         }
+
     }
 
     fun onClickDateTimePicker(p0: Button){
@@ -262,8 +288,9 @@ class FilterFragment : Fragment() {
 
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        if(year<=yearEnd && (monthOfYear+1) <= monthEnd && dayOfMonth <= dateEnd){
+                        if(year<=yearEnd && (monthOfYear+1) <= (monthEnd+1) && dayOfMonth <= dateEnd){
                             bt_star_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                            insertFilter()
                             yearStart = year
                             monthStart = monthOfYear
                             dateStart = dayOfMonth
@@ -281,8 +308,9 @@ class FilterFragment : Fragment() {
 
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        if(year>=yearStart && (monthOfYear+1) >= monthStart && dayOfMonth >= dateStart){
+                        if(year>=yearStart && (monthOfYear+1) >= (monthStart+1) && dayOfMonth >= dateStart){
                             bt_end_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
+                            insertFilter()
                             yearEnd = year
                             monthEnd = monthOfYear
                             dateEnd = dayOfMonth
@@ -294,16 +322,14 @@ class FilterFragment : Fragment() {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-
+    fun insertFilter(){
         var startTime: String = ""
         var endTime: String = ""
 
         when(rg_dates_filter_fragment.checkedRadioButtonId){
             R.id.rb_in_theatre_filter_fragment -> {
-                startTime = ""
-                endTime = ""
+                startTime = "now"
+                endTime = "now"
             }
             else -> {
                 startTime = bt_star_time.text.toString()
@@ -311,7 +337,6 @@ class FilterFragment : Fragment() {
             }
         }
         viewModel.insertFilter(sortBy, startTime, endTime,genres)
-
     }
 
 }

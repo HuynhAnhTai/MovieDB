@@ -1,4 +1,4 @@
-package com.example.moviedb.savedScreen
+package com.example.moviedb.screen.savedScreen
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.moviedb.savedScreen.detailSaveScreen
+package com.example.moviedb.screen.savedScreen.detailSaveScreen
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.detail_save_fragment.*
 class DetailSaveFragment : Fragment() {
 
     companion object {
-        fun newInstance() = DetailSaveFragment()
+        fun newInstance() =
+            DetailSaveFragment()
     }
     private lateinit var viewModelFactory: DetailSaveViewModelFactory
     private lateinit var viewModel: DetailSaveViewModel
@@ -57,12 +58,20 @@ class DetailSaveFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = DetailSaveViewModelFactory(context!!,DetailSaveFragmentArgs.fromBundle(arguments!!).id)
+        viewModelFactory =
+            DetailSaveViewModelFactory(
+                context!!,
+                DetailSaveFragmentArgs.fromBundle(
+                    arguments!!
+                ).id
+            )
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(DetailSaveViewModel::class.java)
         // TODO: Use the ViewModel
 
         viewModel.movie.observe(viewLifecycleOwner, Observer {
-            if(it.id == DetailSaveFragmentArgs.fromBundle(arguments!!).id){
+            if(it.id == DetailSaveFragmentArgs.fromBundle(
+                    arguments!!
+                ).id){
                 loadData(it)
             }
         })
