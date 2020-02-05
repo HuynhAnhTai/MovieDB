@@ -11,15 +11,9 @@ import kotlinx.coroutines.Job
 
 class SavedViewModel(private var context: Context) : ViewModel() {
 
-    var viewModel = Job()
-    var conroutineScope = CoroutineScope(viewModel + Dispatchers.Main)
-
-
     val movieSave : LiveData<List<MoviesEntity>> = getDatabaseMovie(context).dao.getMovies()
-
 
     override fun onCleared() {
         super.onCleared()
-        viewModel.cancel()
     }
 }

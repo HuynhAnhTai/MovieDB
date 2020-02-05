@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.CreditByIdFilmResponse
@@ -35,20 +36,16 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
 
     private var done: Int = 0
 
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
-
     init {
         getDetailMovie()
-        getCastMovie()
-        checkSave()
     }
 
     private fun getDetailMovie() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try{
                 var result = API.RETROFIT_SERVICE.getDetailMovieById(id).await()
                 _detailMovie.value = result
+                getCastMovie()
             }
             catch (e: Exception){
                 _detailMovie.value = MovieByIdResponse(false,"",ArrayList(),
@@ -58,10 +55,11 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     }
 
     private fun getCastMovie(){
-        coroutineScope.launch {
+        viewModelScope.launch {
             try{
                 var result = API.RETROFIT_SERVICE.getCastMovie(id).await()
                 _creditMovie.value = result
+                checkSave()
             }
             catch (e: Exception){
                 _creditMovie.value = CreditByIdFilmResponse(0,ArrayList())
@@ -70,7 +68,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     }
 
     private fun checkSave(){
-        coroutineScope.launch {
+        viewModelScope.launch {
             var value1 = MoviesEntity(false,"","",-1,"","","",0F)
             withContext(Dispatchers.IO){
                 value1 = getDatabaseMovie(context).dao.getMovieById(id)
@@ -85,7 +83,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
 
 
     fun insertMovie(moviesEntity: MoviesEntity){
-        coroutineScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO){
                 getDatabaseMovie(context!!).dao.insertMovies(moviesEntity)
                 done = 1
@@ -97,7 +95,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     }
 
     fun deleteMovie(moviesEntity: MoviesEntity){
-        coroutineScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO){
                 getDatabaseMovie(context!!).dao.deleteMoviesById(moviesEntity.id)
                 done = 1
@@ -111,6 +109,5 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
     }
 }

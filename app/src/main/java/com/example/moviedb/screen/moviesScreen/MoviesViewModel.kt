@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.MoviesTopRatedResponse
@@ -13,9 +14,6 @@ import kotlinx.coroutines.*
 import java.lang.Exception
 
 class MoviesViewModel(private var context: Context) : ViewModel() {
-
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private val _movies = MutableLiveData<List<MoviesTopRatedResults>>()
 
@@ -31,16 +29,13 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
     var movieTheaterPage : Int =0
 
     fun getFilter() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO){
-
                 filter = getFilterData()
                 if (filter == null || filter.startTime == "now"){
-
                     getMoviesTheatre()
                 }else{
-
-                    getMoviesTopRated()
+                    getMoviesBetweenDate()
                 }
             }
         }
@@ -50,11 +45,26 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
         return getDatabaseMovie(context).dao.getFilterById(1)
     }
 
-    private fun getMoviesTopRated() {
-        coroutineScope.launch {
+    private fun getMoviesBetweenDate() {
+        viewModelScope.launch {
             try{
                 moviePage++
-                var listResult = API.RETROFIT_SERVICE.getMoviesTopRated(moviePage).await()
+                var listResult = MoviesTopRatedResponse(0,0,0,ArrayList())
+                if (filter.sortBy.equals("title") || filter.sortBy.equals("")){
+                    listResult = API.RETROFIT_SERVICE
+                        .getFilterFlimBetweenDates("original_title.asc",
+                            moviePage, filter.startTime,
+                            filter.endTime,
+                            filter.genres)
+                        .await()
+                }else {
+                    listResult = API.RETROFIT_SERVICE
+                        .getFilterFlimBetweenDates(filter.sortBy+".desc",
+                            moviePage, filter.startTime,
+                            filter.endTime,
+                            filter.genres)
+                        .await()
+                }
                 _movies.value = listResult.results
             }
             catch (e: Exception){
@@ -64,10 +74,24 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
     }
 
     private fun getMoviesTheatre() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try{
                 movieTheaterPage++
-                var listResult = API.RETROFIT_SERVICE.getMoviesNowPlaying(movieTheaterPage).await()
+                var listResult = MoviesTopRatedResponse(0,0,0,ArrayList())
+                if (filter.sortBy.equals("title") || filter.sortBy.equals("")){
+                    listResult = API.RETROFIT_SERVICE
+                        .getFilterFlimTheatre("original_title.asc",
+                            movieTheaterPage,
+                            filter.genres)
+                        .await()
+                }else {
+                    listResult = API.RETROFIT_SERVICE
+                        .getFilterFlimTheatre(
+                            filter.sortBy + ".desc",
+                            movieTheaterPage,
+                            filter.genres
+                        ).await()
+                }
                 _movies.value = listResult.results
             }
             catch (e: Exception){
@@ -76,9 +100,12 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
         }
     }
 
+    fun done(){
+        _movies.value = ArrayList()
+    }
+
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
     }
 }

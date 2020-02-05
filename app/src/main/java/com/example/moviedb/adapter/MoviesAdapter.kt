@@ -26,10 +26,10 @@ class MoviesAdapter(val filmClick: MoviesClick) :ListAdapter<MoviesTopRatedResul
 
     override fun onBindViewHolder(holder: ItemMoviesHolder, position: Int) {
         var item = getItem(position)
-            holder.bind(item)
-            holder.itemView.setOnClickListener {
-                filmClick.onClick(item)
-            }
+        holder.bind(item)
+        holder.itemView.setOnClickListener {
+            filmClick.onClick(item)
+        }
     }
 }
 

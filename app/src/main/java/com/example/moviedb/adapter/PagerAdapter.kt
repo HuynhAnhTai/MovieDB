@@ -11,10 +11,10 @@ import com.example.moviedb.seriesScreen.SeriesFragment
 class PagerAdapter (fm: FragmentManager):FragmentPagerAdapter(fm){
     override fun getItem(position: Int): Fragment {
         when (position){
-            0 -> return MoviesFragment.newInstance()
-            1 -> return SeriesFragment.newInstance()
-            2 -> return SavedFragment.newInstance()
-            else -> return PeopleFragment.newInstance()
+            0 -> return MoviesFragment()
+            1 -> return SeriesFragment()
+            2 -> return SavedFragment()
+            else -> return PeopleFragment()
         }
     }
 

@@ -4,14 +4,12 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
 import kotlinx.coroutines.*
 
 class DetailSaveViewModel(private var context: Context, private var id: Long) : ViewModel() {
-
-    private var viewModel = Job()
-    private var conroutineScope = CoroutineScope(viewModel + Dispatchers.Main)
 
     private var _movie = MutableLiveData<MoviesEntity>()
 
@@ -23,7 +21,7 @@ class DetailSaveViewModel(private var context: Context, private var id: Long) : 
     }
 
     private fun getDetailFilm() {
-        conroutineScope.launch {
+        viewModelScope.launch {
             var value1 = MoviesEntity(false,"","",-1,"","","",0F)
             withContext(Dispatchers.IO){
                 value1 = getDatabaseMovie(context).dao.getMovieById(id)
@@ -37,7 +35,7 @@ class DetailSaveViewModel(private var context: Context, private var id: Long) : 
     }
 
     fun insertMovie(moviesEntity: MoviesEntity){
-        conroutineScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO){
                 getDatabaseMovie(context!!).dao.insertMovies(moviesEntity)
             }
@@ -46,7 +44,7 @@ class DetailSaveViewModel(private var context: Context, private var id: Long) : 
     }
 
     fun deleteMovie(moviesEntity: MoviesEntity){
-        conroutineScope.launch {
+        viewModelScope.launch {
             withContext(Dispatchers.IO){
                 getDatabaseMovie(context!!).dao.deleteMoviesById(moviesEntity.id)
             }
@@ -55,6 +53,5 @@ class DetailSaveViewModel(private var context: Context, private var id: Long) : 
 
     override fun onCleared() {
         super.onCleared()
-        viewModel.cancel()
     }
 }

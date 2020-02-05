@@ -36,7 +36,7 @@ class DetailMoviesFragment : Fragment() {
 
     private lateinit var adapter: CastMovieAdapter
 
-    private lateinit var moviesEntity: MoviesEntity
+    private var moviesEntity: MoviesEntity = MoviesEntity(false,"","",0,"","","",0F)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,15 +59,12 @@ class DetailMoviesFragment : Fragment() {
         imageViewStarOff.setOnClickListener {
             iv_start_off_detal_movies_fragment.visibility = View.GONE
             iv_start_on_detal_movies_fragment.visibility = View.VISIBLE
-
-            //viewModel.insertMovie(moviesEntity)
         }
 
         imageViewStarOn.setOnClickListener {
             iv_start_off_detal_movies_fragment.visibility = View.VISIBLE
             iv_start_on_detal_movies_fragment.visibility = View.GONE
 
-            //viewModel.deleteMovie(moviesEntity)
         }
 
         return view

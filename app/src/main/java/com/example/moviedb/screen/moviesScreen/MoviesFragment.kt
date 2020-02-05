@@ -82,91 +82,25 @@ class MoviesFragment : Fragment() {
             if (it!=null) {
                 filter = it
                 dataPrimary = ArrayList<MoviesTopRatedResults>()
-                hasFilter = false
                 viewModel.getFilter()
             }
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
             if(it.size>0){
-                filterMovies(it)
+                for (i in it){
+                    if (i==null){
+                        continue
+                    }
+                    dataPrimary.add(i)
+                }
+                viewModel.done()
+                moviesAdapter.submitList(dataPrimary)
+                progressBar.visibility = View.GONE
+            }
+            else if(it.size==0){
+                progressBar.visibility = View.GONE
             }
         })
-    }
-
-    private fun filterMovies(it: List<MoviesTopRatedResults>) {
-
-
-        var genres = filter.genres.split(",")
-
-        var temp2 = ArrayList<MoviesTopRatedResults>()
-
-        if (genres.size>1) {
-            for (i in it) {
-                for (t in i.genre_ids) {
-                    if (t.toString() in genres) {
-                        temp2.add(i)
-                        dataPrimary.add(i)
-                        break
-                    }
-                }
-            }
-            if (!hasFilter) {
-                for (i in dataPrimary) {
-                    var flag: Int = 0
-                    for (t in i.genre_ids) {
-                        if (t.toString() in genres) {
-                            flag = 1
-                            break
-                        }
-                    }
-                    if (flag == 0) {
-                        dataPrimary.remove(i)
-                    }
-                }
-                hasFilter = true
-            }
-        }else{
-            for (i in it){
-                temp2.add(i)
-            }
-        }
-        if(filter.startTime.equals("now")){
-            for (i in temp2){
-                if (!dataPrimary.contains(i)){
-                    dataPrimary.add(i)
-                }
-            }
-            moviesAdapter.submitList(filter(dataPrimary))
-        }else{
-            var startTime = parser.parse(filter.startTime)
-            var endTime = parser.parse(filter.endTime)
-
-            var data: MutableList<MoviesTopRatedResults> = ArrayList()
-
-            for (i in temp2){
-                var releaseTime = parser.parse(i.release_date)
-                if(startTime<=releaseTime && releaseTime<=endTime){
-                    data.add(i)
-                }
-            }
-
-            for (i in data){
-                if(!dataPrimary.contains(i)){
-                    dataPrimary.add(i)
-                }
-            }
-            moviesAdapter.submitList(filter(dataPrimary))
-        }
-        progressBar.visibility = View.GONE
-    }
-
-    private fun filter(it: List<MoviesTopRatedResults>) : List<MoviesTopRatedResults>{
-        when(filter.sortBy){
-            "popular"-> return it.sortedWith(compareByDescending { it.popularity })
-            "rated"-> return it.sortedWith(compareByDescending { it.vote_average })
-            "date"-> return it.sortedWith(compareByDescending { parser.parse(it.release_date) })
-            else-> return it.sortedWith(compareBy { it.title })
-        }
     }
 
     override fun onStop() {

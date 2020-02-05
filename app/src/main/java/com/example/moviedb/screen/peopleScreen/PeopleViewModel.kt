@@ -3,6 +3,7 @@ package com.example.moviedb.peopleScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.moviedb.modelAPI.PeoplePopularResponse
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
@@ -12,8 +13,6 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class PeopleViewModel : ViewModel() {
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private val _people = MutableLiveData<PeoplePopularResponse>()
     var peoplePage : Int =0
@@ -26,7 +25,7 @@ class PeopleViewModel : ViewModel() {
     }
 
     fun getPeoplePopular() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try{
                 peoplePage++
                 var listResult = API.RETROFIT_SERVICE.getPeoplePopular(peoplePage).await()
@@ -40,6 +39,5 @@ class PeopleViewModel : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
     }
 }

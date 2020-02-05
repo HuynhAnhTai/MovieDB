@@ -15,6 +15,7 @@ import android.app.DatePickerDialog
 import android.view.KeyEvent
 import android.widget.TextView
 import com.example.moviedb.db.FilterEntity
+import java.time.LocalDate
 import java.util.*
 
 
@@ -58,7 +59,6 @@ class FilterFragment : Fragment() {
 
     private var sortBy: String = ""
     private var genres: String = ""
-    private var check: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -115,9 +115,8 @@ class FilterFragment : Fragment() {
         bt_western.setOnClickListener {onClick(bt_western)}
 
         tv_to = view.findViewById(R.id.tv_to)
-
-        bt_star_time.setText( yearStart.toString()+ "-" + (monthStart + 1) + "-" + dateStart.toString())
-        bt_end_time.setText( yearEnd.toString()+ "-" + (monthEnd + 1) + "-" + dateEnd.toString())
+        setDataButton(bt_star_time,yearStart,monthStart+1,dateStart)
+        setDataButton(bt_end_time,yearEnd,monthEnd+1,dateEnd)
 
         bt_star_time.setOnClickListener {
             onClickDateTimePicker(bt_star_time)
@@ -130,20 +129,19 @@ class FilterFragment : Fragment() {
         radioGroupSort.setOnCheckedChangeListener { radioGroup, i ->
             when(i){
                 R.id.rb_most_popular_filter_fragment -> {
-                    sortBy = "popular"
-                   // insertFilter()
+                    sortBy = "popularity"
                 }
                 R.id.rb_best_rated_filter_fragment ->{
-                    sortBy = "rated"
-                   // insertFilter()
+                    sortBy = "vote_average"
                 }
                 R.id.rb_release_date_filter_fragment -> {
-                    sortBy = "date"
-                  //  insertFilter()
+                    sortBy = "release_date"
+                }
+                R.id.rb_alphabetic_order_filter_fragment->{
+                    sortBy = "title"
                 }
                 else -> {
-                    sortBy = "order"
-                  //  insertFilter()
+                    sortBy = ""
                 }
             }
         }
@@ -154,17 +152,11 @@ class FilterFragment : Fragment() {
                     bt_start_time_picker_filter_fragment.visibility = View.GONE
                     bt_end_time_filter_fragment.visibility = View.GONE
                     tv_to.visibility = View.GONE
-                    if(!check){
-                        check = true
-                    }else{
-                     //   insertFilter()
-                    }
                 }
                 else -> {
                     bt_start_time_picker_filter_fragment.visibility = View.VISIBLE
                     bt_end_time_filter_fragment.visibility = View.VISIBLE
                     tv_to.visibility = View.VISIBLE
-                  //  insertFilter()
                 }
             }
         }
@@ -189,9 +181,9 @@ class FilterFragment : Fragment() {
 
     private fun loadData(it: FilterEntity) {
         when(it.sortBy){
-            "popular" -> radioGroupSort.check(R.id.rb_most_popular_filter_fragment)
-            "rated" -> radioGroupSort.check(R.id.rb_best_rated_filter_fragment)
-            "date" -> radioGroupSort.check(R.id.rb_release_date_filter_fragment)
+            "popularity" -> radioGroupSort.check(R.id.rb_most_popular_filter_fragment)
+            "vote_average" -> radioGroupSort.check(R.id.rb_best_rated_filter_fragment)
+            "release_date" -> radioGroupSort.check(R.id.rb_release_date_filter_fragment)
             else -> radioGroupSort.check(R.id.rb_alphabetic_order_filter_fragment)
         }
 
@@ -269,11 +261,9 @@ class FilterFragment : Fragment() {
         if(p0.currentTextColor == -16185336){
             p0.setTextColor(resources.getColor(R.color.red))
             genres+=","+p0.hint.toString()
-           // insertFilter()
         }else{
             p0.setTextColor(resources.getColor(R.color.black))
             genres = genres.replace(","+p0.hint,"")
-           // insertFilter()
         }
 
     }
@@ -289,12 +279,21 @@ class FilterFragment : Fragment() {
 
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        if(year<=yearEnd && (monthOfYear+1) <= (monthEnd+1) && dayOfMonth <= dateEnd){
-                            bt_star_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                    //        insertFilter()
-                            yearStart = year
-                            monthStart = monthOfYear
-                            dateStart = dayOfMonth
+                        if(year<=yearEnd){
+                            if (year<yearEnd){
+                                setDataButton(bt_star_time,year,monthOfYear+1,dayOfMonth)
+                            }else{
+                                if ((monthOfYear+1) <= monthEnd){
+                                    if ((monthOfYear+1) < monthEnd){
+                                        setDataButton(bt_star_time,year,monthOfYear+1,dayOfMonth)
+                                    }
+                                    else{
+                                        if (dayOfMonth <= dateEnd){
+                                            setDataButton(bt_star_time,year,monthOfYear+1,dayOfMonth)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }, yearStart, monthStart, dateStart
                 )
@@ -309,17 +308,47 @@ class FilterFragment : Fragment() {
 
                 val datePickerDialog = DatePickerDialog(context!!,
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        if(year>=yearStart && (monthOfYear+1) >= (monthStart+1) && dayOfMonth >= dateStart){
-                            bt_end_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                         //   insertFilter()
-                            yearEnd = year
-                            monthEnd = monthOfYear
-                            dateEnd = dayOfMonth
+                        if(year>=yearStart){
+                            if (year>yearStart){
+                                setDataButton(bt_end_time,year,monthOfYear+1,dayOfMonth)
+                            }else{
+                                if ((monthOfYear+1)>=monthStart){
+                                    if ((monthOfYear+1)>monthStart){
+                                        setDataButton(bt_end_time,year,monthOfYear+1,dayOfMonth)
+                                    }
+                                    else{
+                                        if (dayOfMonth>=dateStart){
+                                            setDataButton(bt_end_time,year,monthOfYear+1,dayOfMonth)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }, yearEnd, monthEnd, dateEnd
                 )
                 datePickerDialog.show()
             }
+        }
+    }
+
+    private fun setDataButton(button: Button, year: Int, month: Int, day: Int){
+        var m: String = month.toString()
+        var d: String = day.toString()
+        if (month<10){
+            m = "0"+m
+        }
+        if (day<10){
+            d = "0"+d
+        }
+        button.text = year.toString()+"-"+m+"-"+d
+        if (button.id == R.id.bt_start_time_picker_filter_fragment){
+            yearStart = year
+            monthStart = month
+            dateStart = day
+        }else{
+            yearEnd = year
+            monthEnd = month
+            dateEnd = day
         }
     }
 

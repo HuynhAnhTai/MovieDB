@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.moviedb.db.GenresEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.Genres
@@ -16,15 +17,12 @@ class BeginViewModel(private val context: Context) : ViewModel() {
 
     val genresDB = getDatabaseMovie(context).dao.getGenres()
 
-    private var viewModel = Job()
-    private var coroutineScope = CoroutineScope(viewModel + Dispatchers.Main)
-
     init {
         getGenres()
     }
 
     private fun getGenres(){
-        coroutineScope.launch {
+        viewModelScope.launch {
 
             lateinit var result: GenresReponse
             withContext(Dispatchers.IO){
@@ -44,10 +42,7 @@ class BeginViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-
-
     override fun onCleared() {
         super.onCleared()
-        viewModel.cancel()
     }
 }
