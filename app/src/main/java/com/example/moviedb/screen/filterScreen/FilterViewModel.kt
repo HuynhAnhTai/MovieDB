@@ -17,6 +17,13 @@ class FilterViewModel(private var context: Context) : ViewModel() {
 
     val filter: LiveData<FilterEntity>
         get() = _filter
+
+    private var _back = MutableLiveData<Boolean>()
+
+    val back: LiveData<Boolean>
+        get() = _back
+
+    private var check: Int = 0
     init {
         getFilter()
     }
@@ -40,6 +47,10 @@ class FilterViewModel(private var context: Context) : ViewModel() {
             withContext(Dispatchers.IO){
                 var filter = FilterEntity(1, sortBy, startTime, endTime, genres)
                 getDatabaseMovie(context).dao.insertFilter(filter)
+                check = 1
+            }
+            if (check == 1){
+                _back.value = true
             }
         }
     }

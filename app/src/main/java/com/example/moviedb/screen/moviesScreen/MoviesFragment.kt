@@ -38,7 +38,7 @@ class MoviesFragment : Fragment() {
 
     private var dataPrimary: MutableList<MoviesTopRatedResults> = ArrayList()
 
-    private var hasScroll: Boolean = false
+    private var hasFilter = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -82,6 +82,7 @@ class MoviesFragment : Fragment() {
             if (it!=null) {
                 filter = it
                 dataPrimary = ArrayList<MoviesTopRatedResults>()
+                hasFilter = false
                 viewModel.getFilter()
             }
         })
@@ -109,18 +110,20 @@ class MoviesFragment : Fragment() {
                     }
                 }
             }
-
-            for (i in dataPrimary) {
-                var flag: Int = 0
-                for (t in i.genre_ids) {
-                    if (t.toString() in genres) {
-                        flag = 1
-                        break
+            if (!hasFilter) {
+                for (i in dataPrimary) {
+                    var flag: Int = 0
+                    for (t in i.genre_ids) {
+                        if (t.toString() in genres) {
+                            flag = 1
+                            break
+                        }
+                    }
+                    if (flag == 0) {
+                        dataPrimary.remove(i)
                     }
                 }
-                if (flag == 0){
-                    dataPrimary.remove(i)
-                }
+                hasFilter = true
             }
         }else{
             for (i in it){
@@ -168,7 +171,6 @@ class MoviesFragment : Fragment() {
 
     override fun onStop() {
         super.onStop()
-        hasScroll = false
         viewModel.moviePage = 0
         viewModel.movieTheaterPage = 0
     }

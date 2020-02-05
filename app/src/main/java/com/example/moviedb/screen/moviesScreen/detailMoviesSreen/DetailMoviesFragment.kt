@@ -2,6 +2,7 @@ package com.example.moviedb.moviesScreen.detailMoviesSreen
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -59,14 +60,14 @@ class DetailMoviesFragment : Fragment() {
             iv_start_off_detal_movies_fragment.visibility = View.GONE
             iv_start_on_detal_movies_fragment.visibility = View.VISIBLE
 
-            viewModel.insertMovie(moviesEntity)
+            //viewModel.insertMovie(moviesEntity)
         }
 
         imageViewStarOn.setOnClickListener {
             iv_start_off_detal_movies_fragment.visibility = View.VISIBLE
             iv_start_on_detal_movies_fragment.visibility = View.GONE
 
-            viewModel.deleteMovie(moviesEntity)
+            //viewModel.deleteMovie(moviesEntity)
         }
 
         return view
@@ -101,6 +102,32 @@ class DetailMoviesFragment : Fragment() {
                 iv_start_on_detal_movies_fragment.visibility = View.GONE
             }
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if(view == null){
+            return
+        }
+        view!!.isFocusableInTouchMode = true
+        view!!.requestFocus()
+        view!!.setOnKeyListener { view, i, keyEvent ->
+            if(keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK){
+                if (imageViewStarOn.visibility == View.VISIBLE){
+                    viewModel.insertMovie(moviesEntity)
+                }else{
+                    viewModel.deleteMovie(moviesEntity)
+                }
+                viewModel.back.observe(viewLifecycleOwner, Observer {
+                    if(it==true){
+                        true
+                    }
+                })
+            }
+
+            false
+        }
     }
 
     fun loadData(it: MovieByIdResponse){

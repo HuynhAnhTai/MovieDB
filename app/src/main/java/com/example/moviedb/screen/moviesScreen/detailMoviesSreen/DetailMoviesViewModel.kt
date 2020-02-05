@@ -28,6 +28,13 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     val save: LiveData<MoviesEntity>
         get() = _save
 
+    private var _back = MutableLiveData<Boolean>()
+
+    val back : LiveData<Boolean>
+        get() = _back
+
+    private var done: Int = 0
+
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
@@ -81,6 +88,10 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
         coroutineScope.launch {
             withContext(Dispatchers.IO){
                 getDatabaseMovie(context!!).dao.insertMovies(moviesEntity)
+                done = 1
+            }
+            if(done == 0){
+                _back.value = true
             }
         }
     }
@@ -89,6 +100,10 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
         coroutineScope.launch {
             withContext(Dispatchers.IO){
                 getDatabaseMovie(context!!).dao.deleteMoviesById(moviesEntity.id)
+                done = 1
+            }
+            if (done == 0){
+                _back.value = true
             }
         }
 

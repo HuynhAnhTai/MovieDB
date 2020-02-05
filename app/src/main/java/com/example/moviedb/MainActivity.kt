@@ -12,18 +12,12 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
-    lateinit var navController: NavController
-
-    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navController : NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        drawerLayout = findViewById(R.id.drawer_layout)
         navController = this.findNavController(R.id.myNavHostFragment)
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController, drawerLayout)
     }
 }

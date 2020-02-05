@@ -1,9 +1,11 @@
 package com.example.moviedb.beginScreen
 
+import android.content.ClipData
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.view.menu.MenuView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
@@ -30,6 +32,10 @@ class BeginFragment : Fragment() {
 
     private lateinit var toolbar: Toolbar
 
+    //private lateinit var menuGroup: Menu
+    private lateinit var itemSearch: MenuItem
+    private lateinit var itemFilter: MenuItem
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,6 +45,9 @@ class BeginFragment : Fragment() {
         tabLayout = view.findViewById(R.id.tab_layout_begin_fragment)
         viewPager = view.findViewById(R.id.view_pager_begin_fragment)
         toolbar = view.findViewById(R.id.tool_bar_begin_fragment)
+
+        itemSearch = toolbar.menu.findItem(R.id.menu_search)
+        itemFilter = toolbar.menu.findItem(R.id.menu_filter)
 
        toolbar.setOnMenuItemClickListener {
             when(it.itemId){
@@ -58,6 +67,27 @@ class BeginFragment : Fragment() {
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
 
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                var position = tab.position
+                if (position==0){
+                    itemSearch.setVisible(true)
+                    itemFilter.setVisible(true)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                var position = tab.position
+                if (position==0){
+                    itemSearch.setVisible(false)
+                    itemFilter.setVisible(false)
+                }
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab) {
+
+            }
+        })
         return view
     }
 

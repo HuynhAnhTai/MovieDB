@@ -12,6 +12,7 @@ import android.widget.RadioGroup
 import com.example.moviedb.R
 import kotlinx.android.synthetic.main.filter_fragment.*
 import android.app.DatePickerDialog
+import android.view.KeyEvent
 import android.widget.TextView
 import com.example.moviedb.db.FilterEntity
 import java.util.*
@@ -130,19 +131,19 @@ class FilterFragment : Fragment() {
             when(i){
                 R.id.rb_most_popular_filter_fragment -> {
                     sortBy = "popular"
-                    insertFilter()
+                   // insertFilter()
                 }
                 R.id.rb_best_rated_filter_fragment ->{
                     sortBy = "rated"
-                    insertFilter()
+                   // insertFilter()
                 }
                 R.id.rb_release_date_filter_fragment -> {
                     sortBy = "date"
-                    insertFilter()
+                  //  insertFilter()
                 }
                 else -> {
                     sortBy = "order"
-                    insertFilter()
+                  //  insertFilter()
                 }
             }
         }
@@ -156,7 +157,7 @@ class FilterFragment : Fragment() {
                     if(!check){
                         check = true
                     }else{
-                        insertFilter()
+                     //   insertFilter()
                     }
                 }
                 else -> {
@@ -268,11 +269,11 @@ class FilterFragment : Fragment() {
         if(p0.currentTextColor == -16185336){
             p0.setTextColor(resources.getColor(R.color.red))
             genres+=","+p0.hint.toString()
-            insertFilter()
+           // insertFilter()
         }else{
             p0.setTextColor(resources.getColor(R.color.black))
             genres = genres.replace(","+p0.hint,"")
-            insertFilter()
+           // insertFilter()
         }
 
     }
@@ -290,7 +291,7 @@ class FilterFragment : Fragment() {
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         if(year<=yearEnd && (monthOfYear+1) <= (monthEnd+1) && dayOfMonth <= dateEnd){
                             bt_star_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                            insertFilter()
+                    //        insertFilter()
                             yearStart = year
                             monthStart = monthOfYear
                             dateStart = dayOfMonth
@@ -310,7 +311,7 @@ class FilterFragment : Fragment() {
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         if(year>=yearStart && (monthOfYear+1) >= (monthStart+1) && dayOfMonth >= dateStart){
                             bt_end_time.text = year.toString() + "-" + (monthOfYear + 1) + "-" + dayOfMonth
-                            insertFilter()
+                         //   insertFilter()
                             yearEnd = year
                             monthEnd = monthOfYear
                             dateEnd = dayOfMonth
@@ -319,6 +320,28 @@ class FilterFragment : Fragment() {
                 )
                 datePickerDialog.show()
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if(view == null){
+            return
+        }
+        view!!.isFocusableInTouchMode = true
+        view!!.requestFocus()
+        view!!.setOnKeyListener { view, i, keyEvent ->
+            if(keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK){
+                insertFilter()
+                viewModel.back.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+                    if (it==true){
+                        true
+                    }
+                })
+            }
+
+            false
         }
     }
 
