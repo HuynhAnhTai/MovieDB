@@ -31,6 +31,8 @@ class PeopleFragment : Fragment() {
 
     private var data: MutableList<PeoplesPopularResults> = ArrayList()
     private lateinit var progressBar: ProgressBar
+
+    private var initiate = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,9 +43,13 @@ class PeopleFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyler_view_people_fragment)
 
-        peopleAdapter = PeoplesAdapter(PeoplesClick {
-            this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToDetailInformationPeopleFragment(it))
-        })
+        if(!initiate) {
+            peopleAdapter = PeoplesAdapter(PeoplesClick {
+                this.findNavController().navigate(
+                    BeginFragmentDirections.actionBeginFragmentToDetailInformationPeopleFragment(it)
+                )
+            })
+        }
         recyclerView.adapter = peopleAdapter
 
         recyclerView.layoutManager = GridLayoutManager(context,3)
@@ -63,21 +69,23 @@ class PeopleFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(PeopleViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(PeopleViewModel::class.java)
         // TODO: Use the ViewModel
 
         viewModel.people.observe(viewLifecycleOwner, Observer {
-            if(it.total_results>0){
-                if (it.results.size>0) {
-                    for (i in it.results){
-                        data.add(i)
-                    }
-                    peopleAdapter.submitList(data)
-                    progressBar.visibility = View.GONE
+            if (it.results.size>0) {
+                for (i in it.results){
+                    data.add(i)
                 }
+                initiate = true
+                peopleAdapter.submitList(data)
+                progressBar.visibility = View.GONE
             }
         })
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 
 }

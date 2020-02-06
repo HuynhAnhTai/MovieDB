@@ -25,7 +25,6 @@ class FilterFragment : Fragment() {
     companion object {
         fun newInstance() = FilterFragment()
     }
-    private lateinit var viewModelFactory: FilterViewModelFactory
     private lateinit var viewModel: FilterViewModel
 
     private lateinit var radioGroupSort: RadioGroup
@@ -168,8 +167,7 @@ class FilterFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = FilterViewModelFactory(context!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(FilterViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(FilterViewModel::class.java)
         // TODO: Use the ViewModel
 
         viewModel.filter.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

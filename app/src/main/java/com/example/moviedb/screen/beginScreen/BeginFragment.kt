@@ -14,14 +14,16 @@ import androidx.viewpager.widget.ViewPager
 
 import com.example.moviedb.R
 import com.example.moviedb.adapter.PagerAdapter
+import com.example.moviedb.moviesScreen.MoviesFragment
 import com.google.android.material.tabs.TabLayout
+
+
 
 class BeginFragment : Fragment() {
 
     companion object {
         fun newInstance() = BeginFragment()
     }
-    private lateinit var viewModelFactory: BeginViewModelFactory
     private lateinit var viewModel: BeginViewModel
 
     private lateinit var tabLayout: TabLayout
@@ -36,6 +38,8 @@ class BeginFragment : Fragment() {
     private lateinit var itemSearch: MenuItem
     private lateinit var itemFilter: MenuItem
 
+
+    private  var item: Int = 5
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,7 +70,7 @@ class BeginFragment : Fragment() {
 
         viewPager.adapter = adapter
         tabLayout.setupWithViewPager(viewPager)
-
+        viewPager.offscreenPageLimit = 4
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 var position = tab.position
@@ -93,14 +97,21 @@ class BeginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = BeginViewModelFactory(context!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(BeginViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(BeginViewModel::class.java)
         // TODO: Use the ViewModel
 //        viewModel.genresDB.observe(viewLifecycleOwner, Observer {
 //            if (it.size>0){
 //                Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
 //            }
 //        })
+        item++
     }
 
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }

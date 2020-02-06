@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,7 +29,6 @@ class DetailMoviesFragment : Fragment() {
     }
 
     private lateinit var viewModel: DetailMoviesViewModel
-    private lateinit var viewModelFactory: DetailMoviesViewModelFactory
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageViewStarOff: ImageView
@@ -72,9 +72,9 @@ class DetailMoviesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = DetailMoviesViewModelFactory(DetailMoviesFragmentArgs.fromBundle(arguments!!).id, context!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailMoviesViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(DetailMoviesViewModel::class.java)
         // TODO: Use the ViewModel
+        viewModel._id = DetailMoviesFragmentArgs.fromBundle(arguments!!).id
 
         viewModel.detailMovie.observe(viewLifecycleOwner, Observer {
             if (it.id == DetailMoviesFragmentArgs.fromBundle(arguments!!).id){

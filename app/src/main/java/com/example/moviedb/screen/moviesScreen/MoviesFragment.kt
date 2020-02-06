@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -27,18 +28,16 @@ class MoviesFragment : Fragment() {
     companion object {
         fun newInstance() = MoviesFragment()
     }
-    private lateinit var viewModelFactory: MoviesViewModelFactory
     private lateinit var viewModel: MoviesViewModel
 
     private lateinit var progressBar: ProgressBar
 
     private var filter: FilterEntity = FilterEntity(0,"","","","")
 
-    private var parser = SimpleDateFormat("yyyy-MM-dd")
-
     private var dataPrimary: MutableList<MoviesTopRatedResults> = ArrayList()
 
-    private var hasFilter = false
+    private var initiate = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,10 +48,11 @@ class MoviesFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar_movie)
         recyclerView = view.findViewById(R.id.recyler_view_movies_fragment)
 
-
-        moviesAdapter = MoviesAdapter(MoviesClick {
-            view.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it))
-        })
+        if (!initiate){
+            moviesAdapter = MoviesAdapter(MoviesClick {
+                this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it))
+            })
+        }
 
         recyclerView.adapter = moviesAdapter
 
@@ -74,15 +74,15 @@ class MoviesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = MoviesViewModelFactory(context!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MoviesViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(MoviesViewModel::class.java)
 
         // TODO: Use the ViewModel
         viewModel.filter_all.observe(viewLifecycleOwner, Observer {
-            if (it!=null) {
+            if (it!=filter && it!=null ) {
+                dataPrimary = ArrayList()
                 filter = it
-                dataPrimary = ArrayList<MoviesTopRatedResults>()
                 viewModel.getFilter()
+                initiate = true
             }
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
@@ -93,7 +93,7 @@ class MoviesFragment : Fragment() {
                     }
                     dataPrimary.add(i)
                 }
-                viewModel.done()
+                //viewModel.done()
                 moviesAdapter.submitList(dataPrimary)
                 progressBar.visibility = View.GONE
             }
@@ -107,5 +107,9 @@ class MoviesFragment : Fragment() {
         super.onStop()
         viewModel.moviePage = 0
         viewModel.movieTheaterPage = 0
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 }

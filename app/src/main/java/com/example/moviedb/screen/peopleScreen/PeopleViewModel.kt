@@ -37,6 +37,7 @@ class PeopleViewModel : ViewModel() {
         }
     }
 
+
     override fun onCleared() {
         super.onCleared()
     }

@@ -21,12 +21,13 @@ class SavedFragment : Fragment() {
     companion object {
         fun newInstance() = SavedFragment()
     }
-    private lateinit var viewModelFactory: SavedViewModelFactory
     private lateinit var viewModel: SavedViewModel
 
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var adapter: SaveMovieAdapter
+
+    private var initiate = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,9 +37,12 @@ class SavedFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyler_view_save_fragment)
 
-        adapter = SaveMovieAdapter(SaveMoviesClick {
-            this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToDetailSaveFragment(it))
-        })
+        if (!initiate) {
+            adapter = SaveMovieAdapter(SaveMoviesClick {
+                this.findNavController()
+                    .navigate(BeginFragmentDirections.actionBeginFragmentToDetailSaveFragment(it))
+            })
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(context,3)
 
@@ -47,14 +51,17 @@ class SavedFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = SavedViewModelFactory(context!!)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(SavedViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(SavedViewModel::class.java)
 
         viewModel.movieSave.observe(viewLifecycleOwner, Observer {
             if (it.size > 0){
+                initiate = true
                 adapter.submitList(it)
             }
         })
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }

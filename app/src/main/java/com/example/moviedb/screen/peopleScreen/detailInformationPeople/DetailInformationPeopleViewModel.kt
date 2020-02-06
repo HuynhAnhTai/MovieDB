@@ -12,16 +12,18 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class DetailInformationPeopleViewModel(private var id: Long) : ViewModel() {
+class DetailInformationPeopleViewModel : ViewModel() {
 
     private var _infoPeople = MutableLiveData<PersonInfoResponse>()
 
     val infoPeople: LiveData<PersonInfoResponse>
         get() = _infoPeople
 
-    init {
-        getInfoPeople()
-    }
+    var id: Long = 0
+        set(value) {
+            field = value
+            getInfoPeople()
+        }
 
     private fun getInfoPeople() {
         viewModelScope.launch {

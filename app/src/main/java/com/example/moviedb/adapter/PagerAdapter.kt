@@ -7,14 +7,22 @@ import com.example.moviedb.moviesScreen.MoviesFragment
 import com.example.moviedb.peopleScreen.PeopleFragment
 import com.example.moviedb.screen.savedScreen.SavedFragment
 import com.example.moviedb.seriesScreen.SeriesFragment
+import android.util.SparseArray
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.util.contains
+import androidx.fragment.app.FragmentStatePagerAdapter
 
+
+@Suppress("DEPRECATION")
 class PagerAdapter (fm: FragmentManager):FragmentPagerAdapter(fm){
+
     override fun getItem(position: Int): Fragment {
         when (position){
-            0 -> return MoviesFragment()
-            1 -> return SeriesFragment()
-            2 -> return SavedFragment()
-            else -> return PeopleFragment()
+            0 -> return MoviesFragment.newInstance()
+            1 -> return SeriesFragment.newInstance()
+            2 -> return SavedFragment.newInstance()
+            else-> return PeopleFragment.newInstance()
         }
     }
 
@@ -28,4 +36,8 @@ class PagerAdapter (fm: FragmentManager):FragmentPagerAdapter(fm){
             else -> return "PEOPLE"
         }
     }
+
+
+
+
 }

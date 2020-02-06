@@ -1,15 +1,13 @@
 package com.example.moviedb.filterScreen
 
+import android.app.Application
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.db.getDatabaseMovie
 import kotlinx.coroutines.*
 
-class FilterViewModel(private var context: Context) : ViewModel() {
+class FilterViewModel(application: Application) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
 
     private var _filter = MutableLiveData<FilterEntity>()
@@ -31,7 +29,7 @@ class FilterViewModel(private var context: Context) : ViewModel() {
         viewModelScope.launch {
             var result = FilterEntity(0,"", "","","")
             withContext(Dispatchers.IO){
-                result = getDatabaseMovie(context).dao.getFilterById(1)
+                result = getDatabaseMovie(getApplication()).dao.getFilterById(1)
             }
             if(result==null){
                 _filter.value = FilterEntity(0,"", "","","")
@@ -45,7 +43,7 @@ class FilterViewModel(private var context: Context) : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 var filter = FilterEntity(1, sortBy, startTime, endTime, genres)
-                getDatabaseMovie(context).dao.insertFilter(filter)
+                getDatabaseMovie(getApplication()).dao.insertFilter(filter)
                 check = 1
             }
             if (check == 1){

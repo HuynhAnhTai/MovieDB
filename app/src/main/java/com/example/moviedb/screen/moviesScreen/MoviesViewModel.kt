@@ -1,10 +1,8 @@
 package com.example.moviedb.moviesScreen
 
+import android.app.Application
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.MoviesTopRatedResponse
@@ -13,7 +11,7 @@ import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.*
 import java.lang.Exception
 
-class MoviesViewModel(private var context: Context) : ViewModel() {
+class MoviesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _movies = MutableLiveData<List<MoviesTopRatedResults>>()
 
@@ -21,7 +19,7 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
         get() = _movies
 
     val filter_all: LiveData<FilterEntity>
-        get() = getDatabaseMovie(context).dao.getFilter()
+        get() = getDatabaseMovie(getApplication()).dao.getFilter()
 
     private var filter: FilterEntity = FilterEntity(0,"","now","now","")
 
@@ -42,7 +40,7 @@ class MoviesViewModel(private var context: Context) : ViewModel() {
     }
 
     private suspend fun getFilterData(): FilterEntity {
-        return getDatabaseMovie(context).dao.getFilterById(1)
+        return getDatabaseMovie(getApplication()).dao.getFilterById(1)
     }
 
     private fun getMoviesBetweenDate() {

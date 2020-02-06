@@ -21,7 +21,6 @@ class DetailSaveFragment : Fragment() {
         fun newInstance() =
             DetailSaveFragment()
     }
-    private lateinit var viewModelFactory: DetailSaveViewModelFactory
     private lateinit var viewModel: DetailSaveViewModel
 
     private lateinit var imageViewStarOff: ImageView
@@ -58,14 +57,9 @@ class DetailSaveFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory =
-            DetailSaveViewModelFactory(
-                context!!,
-                DetailSaveFragmentArgs.fromBundle(
-                    arguments!!
-                ).id
-            )
-        viewModel = ViewModelProviders.of(this,viewModelFactory).get(DetailSaveViewModel::class.java)
+
+        viewModel = ViewModelProviders.of(this).get(DetailSaveViewModel::class.java)
+        viewModel.id = DetailSaveFragmentArgs.fromBundle(arguments!!).id
         // TODO: Use the ViewModel
 
         viewModel.movie.observe(viewLifecycleOwner, Observer {

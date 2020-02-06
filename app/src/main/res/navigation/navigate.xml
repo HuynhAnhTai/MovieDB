@@ -41,10 +41,12 @@
             app:popUpTo="@+id/beginFragment" />
         <action
             android:id="@+id/action_beginFragment_to_filterFragment"
-            app:destination="@id/filterFragment" />
+            app:destination="@id/filterFragment"
+            app:popUpTo="@+id/beginFragment" />
         <action
             android:id="@+id/action_beginFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
+            app:destination="@id/searchFragment"
+            app:popUpTo="@+id/beginFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationPeopleFragment"
@@ -76,6 +78,7 @@
         tools:layout="@layout/search_fragment" >
         <action
             android:id="@+id/action_searchFragment_to_detailMoviesFragment"
-            app:destination="@id/detailMoviesFragment" />
+            app:destination="@id/detailMoviesFragment"
+            app:popUpTo="@+id/searchFragment" />
     </fragment>
 </navigation>

@@ -31,6 +31,8 @@ class SeriesFragment : Fragment() {
 
     private lateinit var progressBar: ProgressBar
 
+    private var initiate = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,9 +43,11 @@ class SeriesFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.recyler_view_series_fragment)
 
-        seriesAdapter = SeriessAdapter(SeriesClick {
-            Toast.makeText(context,it, Toast.LENGTH_LONG).show()
-        })
+        if (!initiate) {
+            seriesAdapter = SeriessAdapter(SeriesClick {
+                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            })
+        }
         recyclerView.adapter = seriesAdapter
 
         recyclerView.layoutManager = GridLayoutManager(context,3)
@@ -64,19 +68,22 @@ class SeriesFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(SeriesViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(SeriesViewModel::class.java)
 
         viewModel.series.observe(viewLifecycleOwner, Observer {
-            if(it.total_results>0){
-                if (it.results.size>0) {
-                    for (i in it.results){
-                        data.add(i)
-                    }
-                    seriesAdapter.submitList(data)
-                    progressBar.visibility = View.GONE
+            if (it.results.size>0) {
+                for (i in it.results){
+                    data.add(i)
                 }
+                initiate = true
+                seriesAdapter.submitList(data)
+                progressBar.visibility = View.GONE
             }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
 }

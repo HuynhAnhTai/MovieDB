@@ -1,30 +1,30 @@
 package com.example.moviedb.screen.savedScreen.detailSaveScreen
 
+import android.app.Application
 import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
 import kotlinx.coroutines.*
 
-class DetailSaveViewModel(private var context: Context, private var id: Long) : ViewModel() {
+class DetailSaveViewModel(application: Application) : AndroidViewModel(application) {
 
     private var _movie = MutableLiveData<MoviesEntity>()
 
     val movie : LiveData<MoviesEntity>
         get() = _movie
 
-    init {
-        getDetailFilm()
-    }
+    var id: Long = 0
+        set(value) {
+            field = value
+            getDetailFilm()
+        }
 
     private fun getDetailFilm() {
         viewModelScope.launch {
             var value1 = MoviesEntity(false,"","",-1,"","","",0F)
             withContext(Dispatchers.IO){
-                value1 = getDatabaseMovie(context).dao.getMovieById(id)
+                value1 = getDatabaseMovie(getApplication()).dao.getMovieById(id)
             }
             if (value1==null){
                 _movie.value = MoviesEntity(false,"","",-1,"","","",0F)
@@ -37,7 +37,7 @@ class DetailSaveViewModel(private var context: Context, private var id: Long) : 
     fun insertMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                getDatabaseMovie(context!!).dao.insertMovies(moviesEntity)
+                getDatabaseMovie(getApplication()).dao.insertMovies(moviesEntity)
             }
 
         }
@@ -46,7 +46,7 @@ class DetailSaveViewModel(private var context: Context, private var id: Long) : 
     fun deleteMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                getDatabaseMovie(context!!).dao.deleteMoviesById(moviesEntity.id)
+                getDatabaseMovie(getApplication()).dao.deleteMoviesById(moviesEntity.id)
             }
         }
     }

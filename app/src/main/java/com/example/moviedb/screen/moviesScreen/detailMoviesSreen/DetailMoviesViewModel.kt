@@ -1,10 +1,7 @@
 package com.example.moviedb.moviesScreen.detailMoviesSreen
 
-import android.content.Context
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
 import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.CreditByIdFilmResponse
@@ -13,11 +10,18 @@ import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.*
 import java.lang.Exception
 
-class DetailMoviesViewModel(private var id: Long, private var context: Context) : ViewModel() {
+class DetailMoviesViewModel(application: Application) : AndroidViewModel(application) {
     private val _detailMovie = MutableLiveData<MovieByIdResponse>()
 
     val detailMovie: LiveData<MovieByIdResponse>
         get() = _detailMovie
+
+    var _id: Long = 0
+        set(value) {
+            field = value
+            getDetailMovie()
+        }
+
 
     private val _creditMovie = MutableLiveData<CreditByIdFilmResponse>()
 
@@ -36,14 +40,11 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
 
     private var done: Int = 0
 
-    init {
-        getDetailMovie()
-    }
 
     private fun getDetailMovie() {
         viewModelScope.launch {
             try{
-                var result = API.RETROFIT_SERVICE.getDetailMovieById(id).await()
+                var result = API.RETROFIT_SERVICE.getDetailMovieById(_id).await()
                 _detailMovie.value = result
                 getCastMovie()
             }
@@ -57,7 +58,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     private fun getCastMovie(){
         viewModelScope.launch {
             try{
-                var result = API.RETROFIT_SERVICE.getCastMovie(id).await()
+                var result = API.RETROFIT_SERVICE.getCastMovie(_id).await()
                 _creditMovie.value = result
                 checkSave()
             }
@@ -71,7 +72,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
         viewModelScope.launch {
             var value1 = MoviesEntity(false,"","",-1,"","","",0F)
             withContext(Dispatchers.IO){
-                value1 = getDatabaseMovie(context).dao.getMovieById(id)
+               value1 = getDatabaseMovie(getApplication()).dao.getMovieById(_id)
             }
             if (value1==null){
                 _save.value =  MoviesEntity(false,"","",-1,"","","",0F)
@@ -85,7 +86,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     fun insertMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                getDatabaseMovie(context!!).dao.insertMovies(moviesEntity)
+                getDatabaseMovie(getApplication()).dao.insertMovies(moviesEntity)
                 done = 1
             }
             if(done == 0){
@@ -97,7 +98,7 @@ class DetailMoviesViewModel(private var id: Long, private var context: Context) 
     fun deleteMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                getDatabaseMovie(context!!).dao.deleteMoviesById(moviesEntity.id)
+                getDatabaseMovie(getApplication()).dao.deleteMoviesById(moviesEntity.id)
                 done = 1
             }
             if (done == 0){

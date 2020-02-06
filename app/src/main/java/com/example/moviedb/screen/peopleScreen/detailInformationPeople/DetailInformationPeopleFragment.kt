@@ -20,7 +20,6 @@ class DetailInformationPeopleFragment : Fragment() {
     }
 
     private lateinit var viewModel: DetailInformationPeopleViewModel
-    private lateinit var viewModelFactory: DetailInformationPeopleViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +30,8 @@ class DetailInformationPeopleFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModelFactory = DetailInformationPeopleViewModelFactory(DetailInformationPeopleFragmentArgs.fromBundle(arguments!!).id)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailInformationPeopleViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(DetailInformationPeopleViewModel::class.java)
+        viewModel.id = DetailInformationPeopleFragmentArgs.fromBundle(arguments!!).id
         // TODO: Use the ViewModel
         viewModel.infoPeople.observe(viewLifecycleOwner, Observer {
             if(it.id == DetailInformationPeopleFragmentArgs.fromBundle(arguments!!).id){
