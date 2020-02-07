@@ -73,10 +73,23 @@ class DetailSaveFragment : Fragment() {
 
     private fun loadData(it: MoviesEntity) {
 
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.backdrop_path)
-            .networkPolicy(NetworkPolicy.OFFLINE).into(iv_back_movies_details_movies_save_fragment)
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.poster_path)
-            .networkPolicy(NetworkPolicy.OFFLINE).into(iv_posster_movies_details_save_fragment)
+        if (it.backdrop_path.equals("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N")){
+            Picasso.get().load(it.backdrop_path)
+                .networkPolicy(NetworkPolicy.OFFLINE).fit().into(iv_back_movies_details_movies_save_fragment)
+        }else{
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.backdrop_path)
+                .networkPolicy(NetworkPolicy.OFFLINE).fit().into(iv_back_movies_details_movies_save_fragment)
+        }
+
+        if (it.poster_path.equals("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N")){
+            Picasso.get().load(it.poster_path)
+                .networkPolicy(NetworkPolicy.OFFLINE).fit().into(iv_posster_movies_details_save_fragment)
+        }else{
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.poster_path)
+                .networkPolicy(NetworkPolicy.OFFLINE).fit().into(iv_posster_movies_details_save_fragment)
+        }
+
+
         tv_name_movies_details_save_fragment.text = it.title
 
         tv_genres_movies_details_save_fragment.text = it.genres

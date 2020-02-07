@@ -42,11 +42,34 @@ class DetailInformationPeopleFragment : Fragment() {
     }
 
     private fun loadData(it: PersonInfoResponse) {
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.profile_path).into(iv_picture_profile_detail_information_people_fragment)
+        if (it.profile_path!=null){
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.profile_path).into(iv_picture_profile_detail_information_people_fragment)
+        }else{
+            Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuErL5FJbhFsb_E5fB7HI5uxuDn3EaxiJfDXxeqjZW" +
+                    "CMSgwGJ7&s").into(iv_picture_profile_detail_information_people_fragment)
+        }
+
         tv_name_people_detail_information_fragment.text = it.name
-        tv_place_of_birth_detail_information_fragment.text = "Place of Birth: " + it.place_of_birth
-        tv_birthday_detail_information_fragment.text = "Birthday: " + it.birthday
-        tv_overview_people_detail_fragment.text = it.biography
+
+        if (it.place_of_birth == null) {
+            tv_place_of_birth_detail_information_fragment.text =
+                "Place of Birth: Still Update"
+        }else{
+            tv_place_of_birth_detail_information_fragment.text =
+                "Place of Birth: " + it.place_of_birth
+        }
+
+        if (it.birthday == null) {
+            tv_birthday_detail_information_fragment.text = "Birthday: Still Update"
+        }else{
+            tv_birthday_detail_information_fragment.text = "Birthday: " + it.birthday
+        }
+
+        if (it.biography.equals("")) {
+            tv_overview_people_detail_fragment.text = "Overview Still Update"
+        }else{
+            tv_overview_people_detail_fragment.text = it.biography
+        }
 
     }
 

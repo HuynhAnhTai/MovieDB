@@ -6,8 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".peopleScreen.detailInformationPeople.DetailInformationPeopleFragment">
 
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,100 +14,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         >
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-
-
-            <ImageView
-                android:id="@+id/iv_picture_profile_detail_information_people_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/captainamerica"
-                app:layout_constraintBottom_toTopOf="@id/contraint_detail_people"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:id="@+id/contraint_detail_people"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/iv_picture_profile_detail_information_people_fragment"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_height="match_parent"
                 >
+
+                <ImageView
+                    android:id="@+id/iv_picture_profile_detail_information_people_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/captainamerica"
+                   />
 
                 <TextView
                     android:id="@+id/tv_name_people_detail_information_fragment"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:text="Liam Nesson"
                     android:textColor="@android:color/black"
+                    android:layout_below="@id/iv_picture_profile_detail_information_people_fragment"
                     />
 
                 <TextView
                     android:id="@+id/tv_place_of_birth_detail_information_fragment"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Place of Birth: "
-                    app:layout_constraintTop_toBottomOf="@id/tv_name_people_detail_information_fragment"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_below="@id/tv_name_people_detail_information_fragment"
                     />
 
                 <TextView
                     android:id="@+id/tv_birthday_detail_information_fragment"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Birthday: "
-                    app:layout_constraintTop_toBottomOf="@id/tv_place_of_birth_detail_information_fragment"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_below="@id/tv_place_of_birth_detail_information_fragment"
                     />
 
                 <View
                     android:id="@+id/view_detail_people_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    app:layout_constraintTop_toBottomOf="@id/tv_birthday_detail_information_fragment"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_below="@id/tv_birthday_detail_information_fragment"
                     android:background="@android:color/darker_gray"
                     />
                 <TextView
                     android:id="@+id/tv_overview_people_detail_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/view_detail_people_fragment"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_below="@id/view_detail_people_fragment"
                     android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
                     />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
 

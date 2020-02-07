@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviedb.R
 import com.example.moviedb.modelAPI.CastOfFlim
+import com.example.moviedb.transferShape.CircleTransform
 import com.squareup.picasso.Picasso
 
 class ItemCastMovieHolder private constructor(view: View): RecyclerView.ViewHolder(view){
@@ -18,10 +19,10 @@ class ItemCastMovieHolder private constructor(view: View): RecyclerView.ViewHold
         textViewNameFilm.text = castOfFlim.name
         if (castOfFlim.profile_path == null){
             Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuErL5FJbhFsb_E5fB7HI5uxuDn3EaxiJfDXxeqjZW" +
-                    "CMSgwGJ7&s").into(imageActor)
+                    "CMSgwGJ7&s").transform(CircleTransform()).fit().into(imageActor)
         }else {
             Picasso.get().load("https://image.tmdb.org/t/p/w500" + castOfFlim.profile_path)
-                .into(imageActor)
+                .transform(CircleTransform()).fit().into(imageActor)
         }
     }
 

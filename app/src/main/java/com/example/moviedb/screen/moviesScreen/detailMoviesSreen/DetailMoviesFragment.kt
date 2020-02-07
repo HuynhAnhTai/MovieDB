@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,6 +34,7 @@ class DetailMoviesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var imageViewStarOff: ImageView
     private lateinit var imageViewStarOn: ImageView
+    private lateinit var textViewStillUpdate: TextView
 
     private lateinit var adapter: CastMovieAdapter
 
@@ -48,6 +50,7 @@ class DetailMoviesFragment : Fragment() {
 
         imageViewStarOff = view.findViewById(R.id.iv_start_off_detal_movies_fragment)
         imageViewStarOn = view.findViewById(R.id.iv_start_on_detal_movies_fragment)
+        textViewStillUpdate = view.findViewById(R.id.tv_still_update_details_movies_framgnet)
 
         recyclerView.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
 
@@ -86,6 +89,11 @@ class DetailMoviesFragment : Fragment() {
             if(it.id == DetailMoviesFragmentArgs.fromBundle(arguments!!).id ){
                 if (it.cast.size>0){
                     adapter.submitList(it.cast)
+                    recyclerView.visibility = View.VISIBLE
+                    textViewStillUpdate.visibility = View.GONE
+                }else{
+                    recyclerView.visibility = View.GONE
+                    textViewStillUpdate.visibility = View.VISIBLE
                 }
             }
         })
@@ -128,23 +136,50 @@ class DetailMoviesFragment : Fragment() {
     }
 
     fun loadData(it: MovieByIdResponse){
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.backdrop_path).into(iv_back_movies_details_movies_fragment)
-        Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.poster_path).into(iv_posster_movies_details_fragment)
+        var backdrop_path: String = ""
+        if (it.backdrop_path==null){
+            Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N").fit().into(iv_back_movies_details_movies_fragment)
+            backdrop_path = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N"
+        }else{
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.backdrop_path).fit().into(iv_back_movies_details_movies_fragment)
+            backdrop_path = it.backdrop_path
+        }
+
+        var poster_path: String = ""
+        if ( it.poster_path == null){
+            poster_path = "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N"
+            Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N").fit().into(iv_posster_movies_details_fragment)
+        }else{
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.poster_path).fit().into(iv_posster_movies_details_fragment)
+            poster_path = it.poster_path
+        }
+
         tv_name_movies_details_fragment.text = it.title
 
         var genres: String = ""
-        it.genres.get(it.genres.size-1)
-        for (i in it.genres){
-            if (it.genres.get(it.genres.size-1) == i){
-                genres+=i.name
-            }else{
-                genres+=i.name+", "
+        if (it.genres.size>0){
+            for (i in it.genres){
+                if (it.genres.get(it.genres.size-1) == i){
+                    genres+=i.name
+                }else{
+                    genres+=i.name+", "
+                }
             }
+            tv_genres_movies_details_fragment.text = genres
+        }else{
+            tv_genres_movies_details_fragment.text = "Still update genres"
+            genres = "Still update genres"
         }
 
-        tv_genres_movies_details_fragment.text = genres
-        tv_overview_movie_detail_fragment.text = it.overview
+        var overview: String = ""
+        if ( it.overview.equals("")){
+            tv_overview_movie_detail_fragment.text = "We still update overview"
+            overview = "We still update overview"
+        }else{
+            tv_overview_movie_detail_fragment.text = it.overview
+            overview = it.overview
+        }
 
-        moviesEntity = MoviesEntity(it.adult, it.backdrop_path, genres, it.id, it.overview, it.poster_path, it.title, it.vote_average)
+        moviesEntity = MoviesEntity(it.adult,backdrop_path, genres, it.id, overview, poster_path, it.title, it.vote_average)
     }
 }

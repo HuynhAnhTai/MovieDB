@@ -17,9 +17,12 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     val movies: LiveData<List<MoviesTopRatedResults>>
         get() = _movies
 
+    var page: Int = 0
+
     fun getMoviesSearch(movie: String){
+        page++
         viewModelScope.launch {
-            var value = moviesRepository.getSearchMovie(movie)
+            var value = moviesRepository.getSearchMovie(movie,page)
             if(value.results.size>0) {
                 _movies.value = value.results
             }

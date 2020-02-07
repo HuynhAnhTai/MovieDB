@@ -105,10 +105,10 @@ class MovieRepository (private val application: Application){
         return value
     }
 
-    suspend fun getSearchMovie(nameMovie: String): MoviesTopRatedResponse {
+    suspend fun getSearchMovie(nameMovie: String, page: Int): MoviesTopRatedResponse {
         var value = MoviesTopRatedResponse(0,0,0,ArrayList())
         withContext(Dispatchers.IO){
-            value = API.RETROFIT_SERVICE.getSearchFlim(nameMovie).await()
+            value = API.RETROFIT_SERVICE.getSearchFlim(nameMovie, page).await()
         }
         return value
     }
