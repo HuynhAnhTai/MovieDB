@@ -6,11 +6,14 @@ import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.CreditByIdFilmResponse
 import com.example.moviedb.modelAPI.MovieByIdResponse
+import com.example.moviedb.repository.MovieRepository
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.*
 import java.lang.Exception
 
 class DetailMoviesViewModel(application: Application) : AndroidViewModel(application) {
+    private var movieRepository = MovieRepository(getApplication())
+
     private val _detailMovie = MutableLiveData<MovieByIdResponse>()
 
     val detailMovie: LiveData<MovieByIdResponse>
@@ -38,13 +41,10 @@ class DetailMoviesViewModel(application: Application) : AndroidViewModel(applica
     val back : LiveData<Boolean>
         get() = _back
 
-    private var done: Int = 0
-
-
     private fun getDetailMovie() {
         viewModelScope.launch {
             try{
-                var result = API.RETROFIT_SERVICE.getDetailMovieById(_id).await()
+                var result = movieRepository.getDetailMovieById(_id)
                 _detailMovie.value = result
                 getCastMovie()
             }
@@ -58,7 +58,7 @@ class DetailMoviesViewModel(application: Application) : AndroidViewModel(applica
     private fun getCastMovie(){
         viewModelScope.launch {
             try{
-                var result = API.RETROFIT_SERVICE.getCastMovie(_id).await()
+                var result = movieRepository.getCastMovieByIdFilm(_id)
                 _creditMovie.value = result
                 checkSave()
             }
@@ -70,10 +70,7 @@ class DetailMoviesViewModel(application: Application) : AndroidViewModel(applica
 
     private fun checkSave(){
         viewModelScope.launch {
-            var value1 = MoviesEntity(false,"","",-1,"","","",0F)
-            withContext(Dispatchers.IO){
-               value1 = getDatabaseMovie(getApplication()).dao.getMovieById(_id)
-            }
+            var value1 = movieRepository.checkSaveFilm(_id)
             if (value1==null){
                 _save.value =  MoviesEntity(false,"","",-1,"","","",0F)
             }else{
@@ -85,30 +82,19 @@ class DetailMoviesViewModel(application: Application) : AndroidViewModel(applica
 
     fun insertMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                getDatabaseMovie(getApplication()).dao.insertMovies(moviesEntity)
-                done = 1
-            }
-            if(done == 0){
-                _back.value = true
-            }
+            movieRepository.insertMovieToDB(moviesEntity)
+
+            _back.value = true
         }
     }
 
     fun deleteMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                getDatabaseMovie(getApplication()).dao.deleteMoviesById(moviesEntity.id)
-                done = 1
-            }
-            if (done == 0){
-                _back.value = true
-            }
+            movieRepository.deleteMovieFromDB(moviesEntity.id)
+
+            _back.value = true
         }
 
     }
 
-    override fun onCleared() {
-        super.onCleared()
-    }
 }

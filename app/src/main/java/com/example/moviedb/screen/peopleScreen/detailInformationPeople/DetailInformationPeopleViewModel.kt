@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviedb.modelAPI.PersonInfoResponse
+import com.example.moviedb.repository.PeopleRepository
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,8 @@ import java.lang.Exception
 class DetailInformationPeopleViewModel : ViewModel() {
 
     private var _infoPeople = MutableLiveData<PersonInfoResponse>()
+
+    private var repositoryPeople = PeopleRepository()
 
     val infoPeople: LiveData<PersonInfoResponse>
         get() = _infoPeople
@@ -28,7 +31,7 @@ class DetailInformationPeopleViewModel : ViewModel() {
     private fun getInfoPeople() {
         viewModelScope.launch {
             try{
-                var result = API.RETROFIT_SERVICE.getInfoPeople(id).await()
+                var result = repositoryPeople.getInfoPeopleById(id)
                 _infoPeople.value = result
             }
             catch (e: Exception){

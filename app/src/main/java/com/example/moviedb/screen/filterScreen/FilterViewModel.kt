@@ -5,10 +5,12 @@ import android.content.Context
 import androidx.lifecycle.*
 import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.db.getDatabaseMovie
+import com.example.moviedb.repository.FilterRepository
 import kotlinx.coroutines.*
 
 class FilterViewModel(application: Application) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
+    private var filterRepository = FilterRepository(getApplication())
 
     private var _filter = MutableLiveData<FilterEntity>()
 
@@ -28,31 +30,17 @@ class FilterViewModel(application: Application) : AndroidViewModel(application) 
     fun getFilter() {
         viewModelScope.launch {
             var result = FilterEntity(0,"", "","","")
-            withContext(Dispatchers.IO){
-                result = getDatabaseMovie(getApplication()).dao.getFilterById(1)
-            }
-            if(result==null){
-                _filter.value = FilterEntity(0,"", "","","")
-            }else{
-                _filter.value = result
-            }
+            result = filterRepository.getFilterByIdRoomDB()
+            _filter.value = result
         }
     }
 
     fun insertFilter(sortBy: String, startTime:String, endTime: String, genres: String){
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                var filter = FilterEntity(1, sortBy, startTime, endTime, genres)
-                getDatabaseMovie(getApplication()).dao.insertFilter(filter)
-                check = 1
-            }
-            if (check == 1){
-                _back.value = true
-            }
+            var filter = FilterEntity(1, sortBy, startTime, endTime, genres)
+            filterRepository.insertFilterToRoomDB(filter)
+            check = 1
+            _back.value = true
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
     }
 }

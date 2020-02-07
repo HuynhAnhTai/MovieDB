@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviedb.modelAPI.SeriesTopRatedResponse
+import com.example.moviedb.repository.SeriesRepository
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class SeriesViewModel : ViewModel() {
+    private var seriesRepository = SeriesRepository()
 
     private val _series = MutableLiveData<SeriesTopRatedResponse>()
 
@@ -27,16 +29,12 @@ class SeriesViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 serviecePage++
-                var listResult = API.RETROFIT_SERVICE.getSeriesTopRated(serviecePage).await()
+                var listResult = seriesRepository.getSeriesTopRate(serviecePage)
                 _series.value = listResult
             }
             catch (e: Exception){
                 _series.value = SeriesTopRatedResponse(0,0,0,ArrayList())
             }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
     }
 }

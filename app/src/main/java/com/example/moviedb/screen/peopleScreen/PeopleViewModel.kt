@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviedb.modelAPI.PeoplePopularResponse
+import com.example.moviedb.repository.PeopleRepository
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class PeopleViewModel : ViewModel() {
+    private var repositoryPeople = PeopleRepository()
 
     private val _people = MutableLiveData<PeoplePopularResponse>()
     var peoplePage : Int =0
@@ -26,14 +28,9 @@ class PeopleViewModel : ViewModel() {
 
     fun getPeoplePopular() {
         viewModelScope.launch {
-            try{
-                peoplePage++
-                var listResult = API.RETROFIT_SERVICE.getPeoplePopular(peoplePage).await()
-                _people.value = listResult
-            }
-            catch (e: Exception){
-                _people.value = PeoplePopularResponse(0,0,0,ArrayList())
-            }
+            peoplePage++
+            var listResult = repositoryPeople.getPeoplePopular(peoplePage)
+            _people.value = listResult
         }
     }
 
