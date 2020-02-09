@@ -51,7 +51,7 @@ class SearchFragment : Fragment() {
     ): View? {
         var view = inflater.inflate(R.layout.search_fragment, container, false)
 
-        getActivity()!!.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        getActivity()!!.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
         et_search_name = view.findViewById(R.id.et_search_fragment)
         bt_search = view.findViewById(R.id.bt_search_fragment)
@@ -69,7 +69,7 @@ class SearchFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (! recyclerView!!.canScrollVertically(1)){ //1 for down
-                    viewModel.getMoviesSearch(et_search_name.text.toString())
+                   viewModel.getMoviesSearch(et_search_name.text.toString())
                 }
             }
         })
