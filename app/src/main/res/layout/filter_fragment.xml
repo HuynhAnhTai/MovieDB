@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_sort_by_filter_fragment"
             app:layout_constraintStart_toStartOf="parent"
-            android:checkedButton="@id/rb_most_popular_filter_fragment"
+            android:checkedButton="@id/rb_alphabetic_order_filter_fragment"
             >
 
             <RadioButton

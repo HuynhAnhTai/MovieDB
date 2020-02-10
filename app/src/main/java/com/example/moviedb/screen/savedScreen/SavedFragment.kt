@@ -54,7 +54,7 @@ class SavedFragment : Fragment() {
         viewModel = ViewModelProviders.of(activity!!).get(SavedViewModel::class.java)
 
         viewModel.movieSave.observe(viewLifecycleOwner, Observer {
-            if (it.size > 0){
+            if (it.size >= 0){
                 initiate = true
                 adapter.submitList(it)
             }

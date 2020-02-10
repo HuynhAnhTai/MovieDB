@@ -62,8 +62,17 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch {
             try{
                 movieTheaterPage++
-                var listResult = moviesRepository.getMovieTheater(filter.sortBy,movieTheaterPage,filter.genres)
-                _movies.value = listResult.results
+                if (filter==null){
+                    var listResult = moviesRepository.getMovieTheater("",movieTheaterPage,"")
+                    _movies.value = listResult.results
+                }else {
+                    var listResult = moviesRepository.getMovieTheater(
+                        filter.sortBy,
+                        movieTheaterPage,
+                        filter.genres
+                    )
+                    _movies.value = listResult.results
+                }
             }
             catch (e: Exception){
                 _movies.value = ArrayList()

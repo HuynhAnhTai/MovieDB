@@ -10,6 +10,7 @@ import com.example.moviedb.modelAPI.GenresReponse
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
 class FilterRepository (private val application: Application){
 
@@ -19,7 +20,12 @@ class FilterRepository (private val application: Application){
     suspend fun getGenres(): GenresReponse {
         var value = GenresReponse(ArrayList())
         withContext(Dispatchers.IO){
-            value = API.RETROFIT_SERVICE.getAllGenre().await()
+            try {
+                value = API.RETROFIT_SERVICE.getAllGenre().await()
+            }
+            catch (e: IOException){
+                value = GenresReponse(ArrayList())
+            }
         }
         return value
     }

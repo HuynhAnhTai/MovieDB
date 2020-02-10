@@ -1,11 +1,15 @@
 package com.example.moviedb.peopleScreen
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -19,6 +23,7 @@ import com.example.moviedb.adapter.PeoplesClick
 import com.example.moviedb.beginScreen.BeginFragmentDirections
 import com.example.moviedb.modelAPI.PeoplesPopularResults
 
+@Suppress("DEPRECATION")
 class PeopleFragment : Fragment() {
     private lateinit var peopleAdapter: PeoplesAdapter
     private lateinit var recyclerView: RecyclerView
@@ -45,9 +50,15 @@ class PeopleFragment : Fragment() {
 
         if(!initiate) {
             peopleAdapter = PeoplesAdapter(PeoplesClick {
-                this.findNavController().navigate(
-                    BeginFragmentDirections.actionBeginFragmentToDetailInformationPeopleFragment(it)
-                )
+                if(checkNetworkAvailable()) {
+                    this.findNavController().navigate(
+                        BeginFragmentDirections.actionBeginFragmentToDetailInformationPeopleFragment(
+                            it
+                        )
+                    )
+                }else{
+                    Toast.makeText(context,"No internet",Toast.LENGTH_SHORT).show()
+                }
             })
         }
         recyclerView.adapter = peopleAdapter
@@ -82,6 +93,14 @@ class PeopleFragment : Fragment() {
                 progressBar.visibility = View.GONE
             }
         })
+    }
+
+    fun checkNetworkAvailable(): Boolean {
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 
     override fun onDestroyView() {

@@ -9,23 +9,17 @@
 
     <EditText
         android:id="@+id/et_search_fragment"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/bt_search_fragment"
+        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recyler_view_search_fragment"
         android:background="@drawable/input"
         android:drawableRight="@android:drawable/ic_menu_search"
-        />
-    <Button
-        android:id="@+id/bt_search_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/et_search_fragment"
-        android:text="Search"
-
+        android:imeOptions="actionSearch"
+        android:maxLines="1"
+        android:inputType="text"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyler_view_search_fragment"
@@ -37,6 +31,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progressBar_movie_search"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar_movie_search"
+        android:layout_width="20dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_horizontal"
+        android:indeterminate="true"
+        app:layout_constraintTop_toBottomOf="@id/recyler_view_search_fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,7 +34,6 @@ class BeginFragment : Fragment() {
 
     private lateinit var toolbar: Toolbar
 
-    //private lateinit var menuGroup: Menu
     private lateinit var itemSearch: MenuItem
     private lateinit var itemFilter: MenuItem
 

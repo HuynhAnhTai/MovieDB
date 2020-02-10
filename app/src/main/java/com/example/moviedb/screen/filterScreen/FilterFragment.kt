@@ -171,8 +171,10 @@ class FilterFragment : Fragment() {
         // TODO: Use the ViewModel
 
         viewModel.filter.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it.id == 1){
-                loadData(it)
+            if (it!=null){
+                if (it.id==1) {
+                    loadData(it)
+                }
             }
         })
     }

@@ -1,5 +1,8 @@
 package com.example.moviedb.moviesScreen
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -21,6 +26,7 @@ import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.modelAPI.MoviesTopRatedResults
 import java.text.SimpleDateFormat
 
+@Suppress("DEPRECATION")
 class MoviesFragment : Fragment() {
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var recyclerView: RecyclerView
@@ -50,7 +56,13 @@ class MoviesFragment : Fragment() {
 
         if (!initiate){
             moviesAdapter = MoviesAdapter(MoviesClick {
-                this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it))
+                if(checkNetworkAvailable()) {
+                    this.findNavController().navigate(
+                        BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it)
+                    )
+                }else{
+                    Toast.makeText(context,"No internet",Toast.LENGTH_SHORT).show()
+                }
             })
         }
 
@@ -83,6 +95,10 @@ class MoviesFragment : Fragment() {
                 filter = it
                 viewModel.getFilter()
                 initiate = true
+            }else if(it==null){
+                dataPrimary = ArrayList()
+                viewModel.getFilter()
+                initiate = true
             }
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
@@ -101,6 +117,14 @@ class MoviesFragment : Fragment() {
                 progressBar.visibility = View.GONE
             }
         })
+    }
+
+    fun checkNetworkAvailable(): Boolean {
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 
     override fun onStop() {

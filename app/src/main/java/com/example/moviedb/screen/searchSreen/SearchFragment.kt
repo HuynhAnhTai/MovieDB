@@ -5,10 +5,12 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
@@ -38,8 +40,8 @@ class SearchFragment : Fragment() {
     private lateinit var viewModel: SearchViewModel
 
     private lateinit var et_search_name: EditText
-    private lateinit var bt_search: Button
     private lateinit var recyclerview: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var moviesAdapter: MoviesAdapter
 
@@ -54,8 +56,8 @@ class SearchFragment : Fragment() {
         getActivity()!!.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 
         et_search_name = view.findViewById(R.id.et_search_fragment)
-        bt_search = view.findViewById(R.id.bt_search_fragment)
         recyclerview = view.findViewById(R.id.recyler_view_search_fragment)
+        progressBar = view.findViewById(R.id.progressBar_movie_search)
 
         moviesAdapter = MoviesAdapter(MoviesClick {
             view.findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToDetailMoviesFragment(it))
@@ -69,36 +71,25 @@ class SearchFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (! recyclerView!!.canScrollVertically(1)){ //1 for down
-                   viewModel.getMoviesSearch(et_search_name.text.toString())
+                     progressBar.visibility = View.VISIBLE
+                    viewModel.getMoviesSearch(et_search_name.text.toString())
                 }
             }
         })
 
-
-
-
-        bt_search.setOnClickListener {
-            if(et_search_name.text.toString().length>0){
+        et_search_name.setOnEditorActionListener { textView, i, keyEvent ->
+            if (i == EditorInfo.IME_ACTION_SEARCH){
                 hideSoftKeyBoard(activity!!)
+                viewModel.page = 0
+                progressBar.visibility = View.VISIBLE
                 viewModel.getMoviesSearch(et_search_name.text.toString())
-
+                true
             }
+            false
         }
 
         return view
     }
-
-    fun hideSoftKeyBoard(activity: Activity){
-        if(activity.currentFocus == null){
-            return
-        }
-        val inputMethodManager =
-            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, 0)
-        dataPrimary = ArrayList<MoviesTopRatedResults>()
-    }
-
-
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -113,8 +104,26 @@ class SearchFragment : Fragment() {
                     }
                 }
                 moviesAdapter.submitList(dataPrimary)
+                progressBar.visibility = View.GONE
             }
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        et_search_name.requestFocus()
+        var inputManager: InputMethodManager = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.showSoftInput(et_search_name, InputMethodManager.SHOW_IMPLICIT)
+
+    }
+
+    fun hideSoftKeyBoard(activity: Activity){
+        if(activity.currentFocus == null){
+            return
+        }
+        val inputMethodManager =
+            activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, 0)
+        dataPrimary = ArrayList<MoviesTopRatedResults>()
+    }
 }
