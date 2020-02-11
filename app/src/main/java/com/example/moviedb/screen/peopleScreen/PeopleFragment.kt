@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -22,6 +23,8 @@ import com.example.moviedb.adapter.PeoplesAdapter
 import com.example.moviedb.adapter.PeoplesClick
 import com.example.moviedb.beginScreen.BeginFragmentDirections
 import com.example.moviedb.modelAPI.PeoplesPopularResults
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 
 @Suppress("DEPRECATION")
 class PeopleFragment : Fragment() {
@@ -36,6 +39,8 @@ class PeopleFragment : Fragment() {
 
     private var data: MutableList<PeoplesPopularResults> = ArrayList()
     private lateinit var progressBar: ProgressBar
+    private lateinit var progressBarLoad: ProgressBar
+    private lateinit var imageViewNoInternet: ImageView
 
     private var initiate = false
     override fun onCreateView(
@@ -45,9 +50,21 @@ class PeopleFragment : Fragment() {
         var view: View = inflater.inflate(R.layout.people_fragment, container, false)
 
         progressBar = view.findViewById(R.id.progressBar_people)
-
+        progressBarLoad = view.findViewById(R.id.progressBar_load_people)
         recyclerView = view.findViewById(R.id.recyler_view_people_fragment)
+        imageViewNoInternet = view.findViewById(R.id.iv_no_internet_people)
 
+        if(data.size==0){
+            progressBarLoad.visibility = View.VISIBLE
+        }
+
+        if(!checkNetworkAvailable()){
+            Picasso.get().load("https://art.pixilart.com/c448e718203e765.png")
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(imageViewNoInternet)
+            imageViewNoInternet.visibility = View.VISIBLE
+            progressBarLoad.visibility = View.GONE
+        }
         if(!initiate) {
             peopleAdapter = PeoplesAdapter(PeoplesClick {
                 if(checkNetworkAvailable()) {
@@ -91,6 +108,11 @@ class PeopleFragment : Fragment() {
                 initiate = true
                 peopleAdapter.submitList(data)
                 progressBar.visibility = View.GONE
+                progressBarLoad.visibility = View.GONE
+                imageViewNoInternet.visibility = View.GONE
+            }else if(it.results.size==0){
+                progressBar.visibility = View.GONE
+                progressBarLoad.visibility = View.GONE
             }
         })
     }
@@ -101,10 +123,6 @@ class PeopleFragment : Fragment() {
             val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
             networkInfo?.isConnected ?: false
         } else false
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
 }

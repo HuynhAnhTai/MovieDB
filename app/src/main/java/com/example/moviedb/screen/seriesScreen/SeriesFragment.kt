@@ -1,11 +1,15 @@
 package com.example.moviedb.seriesScreen
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -18,6 +22,8 @@ import com.example.moviedb.adapter.MoviesClick
 import com.example.moviedb.adapter.SeriesClick
 import com.example.moviedb.adapter.SeriessAdapter
 import com.example.moviedb.modelAPI.SeriesTopRatedResults
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 
 class SeriesFragment : Fragment() {
     private lateinit var seriesAdapter: SeriessAdapter
@@ -30,6 +36,8 @@ class SeriesFragment : Fragment() {
     private var data: MutableList<SeriesTopRatedResults> = ArrayList()
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var progressBarLoad: ProgressBar
+    private lateinit var imageViewNoInternet: ImageView
 
     private var initiate = false
 
@@ -40,9 +48,21 @@ class SeriesFragment : Fragment() {
         var view: View = inflater.inflate(R.layout.series_fragment, container, false)
 
         progressBar = view.findViewById(R.id.progressBar_series)
-
+        progressBarLoad = view.findViewById(R.id.progressBar_load_series)
         recyclerView = view.findViewById(R.id.recyler_view_series_fragment)
+        imageViewNoInternet = view.findViewById(R.id.iv_no_internet_series)
 
+        if(data.size==0){
+            progressBarLoad.visibility = View.VISIBLE
+        }
+
+        if (!checkNetworkAvailable()){
+            Picasso.get().load("https://art.pixilart.com/c448e718203e765.png")
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(imageViewNoInternet)
+            imageViewNoInternet.visibility = View.VISIBLE
+            progressBarLoad.visibility = View.GONE
+        }
         if (!initiate) {
             seriesAdapter = SeriessAdapter(SeriesClick {
                 Toast.makeText(context, it, Toast.LENGTH_LONG).show()
@@ -78,12 +98,20 @@ class SeriesFragment : Fragment() {
                 initiate = true
                 seriesAdapter.submitList(data)
                 progressBar.visibility = View.GONE
+                progressBarLoad.visibility = View.GONE
+                imageViewNoInternet.visibility = View.GONE
+            }else{
+                progressBar.visibility = View.GONE
+                progressBarLoad.visibility = View.GONE
             }
         })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    fun checkNetworkAvailable(): Boolean {
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
-
 }

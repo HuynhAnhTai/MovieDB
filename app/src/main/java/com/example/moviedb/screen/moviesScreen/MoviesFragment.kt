@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
@@ -24,6 +25,8 @@ import com.example.moviedb.adapter.MoviesClick
 import com.example.moviedb.beginScreen.BeginFragmentDirections
 import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.modelAPI.MoviesTopRatedResults
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 
 @Suppress("DEPRECATION")
@@ -37,6 +40,8 @@ class MoviesFragment : Fragment() {
     private lateinit var viewModel: MoviesViewModel
 
     private lateinit var progressBar: ProgressBar
+    private lateinit var progressBarLoad: ProgressBar
+    private lateinit var imageViewNoInternet: ImageView
 
     private var filter: FilterEntity = FilterEntity(0,"","","","")
 
@@ -52,7 +57,21 @@ class MoviesFragment : Fragment() {
         var view: View = inflater.inflate(R.layout.movies_fragment, container, false)
 
         progressBar = view.findViewById(R.id.progressBar_movie)
+        progressBarLoad = view.findViewById(R.id.progressBar_load_movie)
         recyclerView = view.findViewById(R.id.recyler_view_movies_fragment)
+        imageViewNoInternet = view.findViewById(R.id.iv_no_internet_movie)
+
+        if (dataPrimary.size==0){
+            progressBarLoad.visibility = View.VISIBLE
+        }
+
+        if(!checkNetworkAvailable()){
+            Picasso.get().load("https://art.pixilart.com/c448e718203e765.png")
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(imageViewNoInternet)
+            imageViewNoInternet.visibility = View.VISIBLE
+            progressBarLoad.visibility = View.GONE
+        }
 
         if (!initiate){
             moviesAdapter = MoviesAdapter(MoviesClick {
@@ -109,12 +128,14 @@ class MoviesFragment : Fragment() {
                     }
                     dataPrimary.add(i)
                 }
-                //viewModel.done()
                 moviesAdapter.submitList(dataPrimary)
                 progressBar.visibility = View.GONE
+                progressBarLoad.visibility = View.GONE
+                imageViewNoInternet.visibility = View.GONE
             }
             else if(it.size==0){
                 progressBar.visibility = View.GONE
+                progressBarLoad.visibility = View.GONE
             }
         })
     }
@@ -131,9 +152,5 @@ class MoviesFragment : Fragment() {
         super.onStop()
         viewModel.moviePage = 0
         viewModel.movieTheaterPage = 0
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }
