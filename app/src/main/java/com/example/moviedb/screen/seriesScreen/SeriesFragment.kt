@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -38,6 +39,7 @@ class SeriesFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var progressBarLoad: ProgressBar
     private lateinit var imageViewNoInternet: ImageView
+    private lateinit var buttonRetry: Button
 
     private var initiate = false
 
@@ -51,6 +53,7 @@ class SeriesFragment : Fragment() {
         progressBarLoad = view.findViewById(R.id.progressBar_load_series)
         recyclerView = view.findViewById(R.id.recyler_view_series_fragment)
         imageViewNoInternet = view.findViewById(R.id.iv_no_internet_series)
+        buttonRetry = view.findViewById(R.id.bt_retry_series)
 
         if(data.size==0){
             progressBarLoad.visibility = View.VISIBLE
@@ -62,6 +65,18 @@ class SeriesFragment : Fragment() {
                 .into(imageViewNoInternet)
             imageViewNoInternet.visibility = View.VISIBLE
             progressBarLoad.visibility = View.GONE
+            buttonRetry.visibility = View.VISIBLE
+        }
+
+        buttonRetry.setOnClickListener {
+            if(checkNetworkAvailable()) {
+                progressBarLoad.visibility = View.VISIBLE
+                imageViewNoInternet.visibility = View.GONE
+                buttonRetry.visibility = View.GONE
+                viewModel.getSeriesTopRated()
+            }else{
+                Toast.makeText(context,"No internet",Toast.LENGTH_SHORT).show()
+            }
         }
         if (!initiate) {
             seriesAdapter = SeriessAdapter(SeriesClick {

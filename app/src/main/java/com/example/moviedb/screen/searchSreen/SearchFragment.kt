@@ -2,6 +2,8 @@ package com.example.moviedb.screen.searchSreen
 
 import android.app.Activity
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
@@ -11,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.Observer
@@ -31,6 +34,7 @@ import com.example.moviedb.modelAPI.MoviesTopRatedResults
 import kotlinx.android.synthetic.main.filter_fragment.*
 
 
+@Suppress("DEPRECATION")
 class SearchFragment : Fragment() {
 
     companion object {
@@ -60,7 +64,12 @@ class SearchFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar_movie_search)
 
         moviesAdapter = MoviesAdapter(MoviesClick {
-            view.findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToDetailMoviesFragment(it))
+            if (checkNetworkAvailable()) {
+                view.findNavController()
+                    .navigate(SearchFragmentDirections.actionSearchFragmentToDetailMoviesFragment(it))
+            }else{
+                Toast.makeText(context,"No Internet", Toast.LENGTH_SHORT).show()
+            }
         })
         recyclerview.adapter = moviesAdapter
 
@@ -71,8 +80,10 @@ class SearchFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (! recyclerView!!.canScrollVertically(1)){ //1 for down
-                     progressBar.visibility = View.VISIBLE
-                    viewModel.getMoviesSearch(et_search_name.text.toString())
+                    if(checkNetworkAvailable()) {
+                        progressBar.visibility = View.VISIBLE
+                        viewModel.getMoviesSearch(et_search_name.text.toString())
+                    }
                 }
             }
         })
@@ -80,9 +91,13 @@ class SearchFragment : Fragment() {
         et_search_name.setOnEditorActionListener { textView, i, keyEvent ->
             if (i == EditorInfo.IME_ACTION_SEARCH){
                 hideSoftKeyBoard(activity!!)
-                viewModel.page = 0
-                progressBar.visibility = View.VISIBLE
-                viewModel.getMoviesSearch(et_search_name.text.toString())
+                if(checkNetworkAvailable()) {
+                    viewModel.page = 0
+                    progressBar.visibility = View.VISIBLE
+                    viewModel.getMoviesSearch(et_search_name.text.toString())
+                }else{
+                    Toast.makeText(context,"No Internet",Toast.LENGTH_SHORT).show()
+                }
                 true
             }
             false
@@ -125,5 +140,13 @@ class SearchFragment : Fragment() {
             activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(activity!!.currentFocus!!.windowToken, 0)
         dataPrimary = ArrayList<MoviesTopRatedResults>()
+    }
+
+    fun checkNetworkAvailable(): Boolean {
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 }

@@ -10,6 +10,7 @@ import com.example.moviedb.modelAPI.MoviesTopRatedResponse
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.IOException
 import java.lang.Exception
 
 class MovieRepository (private val application: Application){
@@ -108,7 +109,11 @@ class MovieRepository (private val application: Application){
     suspend fun getSearchMovie(nameMovie: String, page: Int): MoviesTopRatedResponse {
         var value = MoviesTopRatedResponse(0,0,0,ArrayList())
         withContext(Dispatchers.IO){
-            value = API.RETROFIT_SERVICE.getSearchFlim(nameMovie, page).await()
+            try {
+                value = API.RETROFIT_SERVICE.getSearchFlim(nameMovie, page).await()
+            }catch (e: IOException){
+                value = MoviesTopRatedResponse(0,0,0,ArrayList())
+            }
         }
         return value
     }
