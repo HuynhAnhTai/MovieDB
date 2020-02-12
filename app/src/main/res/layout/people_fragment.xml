@@ -10,7 +10,7 @@
         android:id="@+id/recyler_view_people_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/items_movies"
+        tools:listitem="@layout/items_movies_grid"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -72,5 +72,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.7" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

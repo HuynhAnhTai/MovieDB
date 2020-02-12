@@ -54,6 +54,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
             }
             catch (e: Exception){
                 _movies.value = ArrayList()
+                moviePage--
             }
         }
     }
@@ -76,8 +77,13 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
             }
             catch (e: Exception){
                 _movies.value = ArrayList()
+                movieTheaterPage--
             }
         }
+    }
+
+    fun done(){
+        _movies.value = ArrayList()
     }
 
 

@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
         recyclerview = view.findViewById(R.id.recyler_view_search_fragment)
         progressBar = view.findViewById(R.id.progressBar_movie_search)
 
-        moviesAdapter = MoviesAdapter(MoviesClick {
+        moviesAdapter = MoviesAdapter(3,MoviesClick {
             if (checkNetworkAvailable()) {
                 view.findNavController()
                     .navigate(SearchFragmentDirections.actionSearchFragmentToDetailMoviesFragment(it))

@@ -1,5 +1,6 @@
 package com.example.moviedb.moviesScreen.detailMoviesSreen
 
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.KeyEvent
@@ -7,10 +8,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +23,14 @@ import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.modelAPI.MovieByIdResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_movies_fragment.*
+import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
+import android.net.Uri
+import android.widget.Toast
 
+
+@Suppress("DEPRECATION")
 class DetailMoviesFragment : Fragment() {
 
     companion object {
@@ -35,8 +43,11 @@ class DetailMoviesFragment : Fragment() {
     private lateinit var imageViewStarOff: ImageView
     private lateinit var imageViewStarOn: ImageView
     private lateinit var textViewStillUpdate: TextView
+    private lateinit var bt_trailer: Button
 
     private lateinit var adapter: CastMovieAdapter
+
+    private var urlTrailer: String = ""
 
     private var moviesEntity: MoviesEntity = MoviesEntity(false,"","",0,"","","",0F)
 
@@ -51,6 +62,7 @@ class DetailMoviesFragment : Fragment() {
         imageViewStarOff = view.findViewById(R.id.iv_start_off_detal_movies_fragment)
         imageViewStarOn = view.findViewById(R.id.iv_start_on_detal_movies_fragment)
         textViewStillUpdate = view.findViewById(R.id.tv_still_update_details_movies_framgnet)
+        bt_trailer = view.findViewById(R.id.bt_trailer_video_detals_movies_fragment);
 
         recyclerView.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
 
@@ -68,6 +80,23 @@ class DetailMoviesFragment : Fragment() {
             iv_start_off_detal_movies_fragment.visibility = View.VISIBLE
             iv_start_on_detal_movies_fragment.visibility = View.GONE
 
+        }
+
+        bt_trailer.setOnClickListener {
+            if(checkNetworkAvailable()) {
+                if (urlTrailer.equals("")){
+                    Toast.makeText(context,"No Available Trailer", Toast.LENGTH_SHORT).show()
+                }else{
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("http://www.youtube.com/watch?v=" + urlTrailer)
+                        )
+                    )
+                }
+            }else{
+                Toast.makeText(context,"No Internet", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return view
@@ -180,6 +209,18 @@ class DetailMoviesFragment : Fragment() {
             overview = it.overview
         }
 
+        if (it.videos.results.size>0){
+            urlTrailer = it.videos.results.get(0).key
+        }
+
         moviesEntity = MoviesEntity(it.adult,backdrop_path, genres, it.id, overview, poster_path, it.title, it.vote_average)
+    }
+
+    fun checkNetworkAvailable(): Boolean {
+        val connectivityManager = activity!!.getSystemService(Context.CONNECTIVITY_SERVICE)
+        return if (connectivityManager is ConnectivityManager) {
+            val networkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+            networkInfo?.isConnected ?: false
+        } else false
     }
 }

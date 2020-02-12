@@ -6,6 +6,7 @@ import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.CreditByIdFilmResponse
 import com.example.moviedb.modelAPI.MovieByIdResponse
+import com.example.moviedb.modelAPI.Videos
 import com.example.moviedb.repository.MovieRepository
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.*
@@ -50,7 +51,7 @@ class DetailMoviesViewModel(application: Application) : AndroidViewModel(applica
             }
             catch (e: Exception){
                 _detailMovie.value = MovieByIdResponse(false,"",ArrayList(),
-                    0,"","","",0F)
+                    0,"","","",0F,Videos(ArrayList()))
             }
         }
     }

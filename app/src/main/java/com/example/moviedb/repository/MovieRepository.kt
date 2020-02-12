@@ -4,9 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import com.example.moviedb.db.MoviesEntity
 import com.example.moviedb.db.getDatabaseMovie
-import com.example.moviedb.modelAPI.CreditByIdFilmResponse
-import com.example.moviedb.modelAPI.MovieByIdResponse
-import com.example.moviedb.modelAPI.MoviesTopRatedResponse
+import com.example.moviedb.modelAPI.*
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -63,7 +61,7 @@ class MovieRepository (private val application: Application){
     }
 
     suspend fun getDetailMovieById(id: Long): MovieByIdResponse {
-        var value = MovieByIdResponse(false,"",ArrayList(),id,"","","",0F)
+        var value = MovieByIdResponse(false,"",ArrayList(),id,"","","",0F, Videos(ArrayList<DetailVideo>()))
         withContext(Dispatchers.IO){
             value = API.RETROFIT_SERVICE.getDetailMovieById(id).await()
         }

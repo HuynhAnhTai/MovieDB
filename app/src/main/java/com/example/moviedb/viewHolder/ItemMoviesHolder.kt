@@ -10,18 +10,53 @@ import com.example.moviedb.R
 import com.example.moviedb.modelAPI.MoviesTopRatedResults
 import com.squareup.picasso.Picasso
 
-class ItemMoviesHolder private constructor(view: View): RecyclerView.ViewHolder(view){
-    val imageViewFilm = view.findViewById<ImageView>(R.id.iv_film_item_movies)
-    val textViewNameFilm = view.findViewById<TextView>(R.id.tv_name_film_item_movies)
+class ItemMoviesHolder private constructor(view: View, type: Int): RecyclerView.ViewHolder(view){
 
-    fun bind(moviesTopRatedResults: MoviesTopRatedResults){
+    private lateinit var imageViewFilm: ImageView
+    private lateinit var textViewNameFilm: TextView
+    private lateinit var textViewOverview: TextView
+    init {
+        bindId(type, view)
+    }
+    fun bindId(typeRelative: Int, view: View){
+        if (typeRelative == 3){
+            imageViewFilm = view.findViewById<ImageView>(R.id.iv_film_item_movies)
+            textViewNameFilm = view.findViewById<TextView>(R.id.tv_name_film_item_movies)
+        }else{
+            imageViewFilm = view.findViewById<ImageView>(R.id.iv_film_item_movies_list)
+            textViewNameFilm = view.findViewById<TextView>(R.id.tv_name_film_item_movies_list)
+            textViewOverview = view.findViewById(R.id.tv_overview_item_movie_list)
+        }
+
+    }
+
+    fun bind(moviesTopRatedResults: MoviesTopRatedResults, type: Int){
         textViewNameFilm.text = moviesTopRatedResults.title
-        Picasso.get().load("https://image.tmdb.org/t/p/w500"+moviesTopRatedResults.poster_path).into(imageViewFilm)
+        Picasso.get().load("https://image.tmdb.org/t/p/w500"+moviesTopRatedResults.poster_path).fit().into(imageViewFilm)
+        if (type == 1){
+            textViewOverview.text = moviesTopRatedResults.overview
+        }
     }
 
     companion object{
-        fun from(parent: ViewGroup): ItemMoviesHolder{
-            return ItemMoviesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies, parent, false))
+        fun from(parent: ViewGroup, type: Int): ItemMoviesHolder{
+            if (type == 3) {
+                return ItemMoviesHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.items_movies_grid,
+                        parent,
+                        false
+                    ),type
+                )
+            }else{
+                return ItemMoviesHolder(
+                    LayoutInflater.from(parent.context).inflate(
+                        R.layout.item_movies_list,
+                        parent,
+                        false
+                    ),type
+                )
+            }
         }
     }
 }

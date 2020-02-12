@@ -20,7 +20,7 @@ interface APIService {
     @GET("person/popular?")
     fun getPeoplePopular(@Query("page") page: Int): Deferred<PeoplePopularResponse>
 
-    @GET("movie/{movie_id}?")
+    @GET("movie/{movie_id}?append_to_response=videos")
     fun getDetailMovieById(@Path ("movie_id") id: Long):Deferred<MovieByIdResponse>
 
     @GET("movie/{movie_id}/credits?")

@@ -28,7 +28,7 @@ class ItemPeoplesHolder private constructor(view: View): RecyclerView.ViewHolder
 
     companion object{
         fun from(parent: ViewGroup): ItemPeoplesHolder{
-            return ItemPeoplesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies, parent, false))
+            return ItemPeoplesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies_grid, parent, false))
         }
     }
 }

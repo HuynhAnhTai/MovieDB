@@ -9,7 +9,7 @@
         android:id="@+id/recyler_view_save_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/items_movies"
+        tools:listitem="@layout/items_movies_grid"
         />
 
 </FrameLayout>

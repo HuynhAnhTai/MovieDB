@@ -1,6 +1,7 @@
 package com.example.moviedb.beginScreen
 
 import android.content.ClipData
+import android.content.Context
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
@@ -52,14 +53,40 @@ class BeginFragment : Fragment() {
         itemSearch = toolbar.menu.findItem(R.id.menu_search)
         itemFilter = toolbar.menu.findItem(R.id.menu_filter)
 
-       toolbar.setOnMenuItemClickListener {
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+        if (sharedPref!!.getInt("Type", 3)!=1) {
+            with(sharedPref!!.edit()) {
+                putInt("Type", 3)
+                commit()
+            }
+        }
+
+        toolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_search -> {
                     this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToSearchFragment())
                     true
                 }
-                else -> {
+                R.id.menu_filter -> {
                     this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToFilterFragment())
+                    true
+                }
+                else -> {
+
+                    if (sharedPref != null) {
+                        val type = sharedPref.getInt("Type", 3)
+                        if (type == 3) {
+                            with(sharedPref.edit()) {
+                                putInt("Type", 1)
+                                commit()
+                            }
+                        }else{
+                            with(sharedPref.edit()) {
+                                putInt("Type", 3)
+                                commit()
+                            }
+                        }
+                    }
                     true
                 }
             }

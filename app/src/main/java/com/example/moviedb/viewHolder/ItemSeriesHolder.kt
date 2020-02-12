@@ -21,7 +21,7 @@ class ItemSeriesHolder private constructor(view: View): RecyclerView.ViewHolder(
 
     companion object{
         fun from(parent: ViewGroup): ItemSeriesHolder{
-            return ItemSeriesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies, parent, false))
+            return ItemSeriesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies_grid, parent, false))
         }
     }
 }

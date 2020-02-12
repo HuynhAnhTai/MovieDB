@@ -24,7 +24,7 @@ class ItemSaveMoviesHolder private constructor(view: View): RecyclerView.ViewHol
 
     companion object{
         fun from(parent: ViewGroup): ItemSaveMoviesHolder{
-            return ItemSaveMoviesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies, parent, false))
+            return ItemSaveMoviesHolder(LayoutInflater.from(parent.context).inflate(R.layout.items_movies_grid, parent, false))
         }
     }
 }

@@ -1,10 +1,12 @@
 package com.example.moviedb.moviesScreen
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +20,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.moviedb.R
@@ -29,6 +32,7 @@ import com.example.moviedb.modelAPI.MoviesTopRatedResults
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
+import kotlin.properties.Delegates
 
 @Suppress("DEPRECATION")
 class MoviesFragment : Fragment() {
@@ -50,6 +54,7 @@ class MoviesFragment : Fragment() {
     private var dataPrimary: MutableList<MoviesTopRatedResults> = ArrayList()
 
     private var initiate = false
+    private var type = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,6 +68,10 @@ class MoviesFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyler_view_movies_fragment)
         imageViewNoInternet = view.findViewById(R.id.iv_no_internet_movie)
         buttonRetry = view.findViewById(R.id.bt_retry_movie)
+
+        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+
+        type = sharedPref!!.getInt("Type",3)
 
         if (dataPrimary.size==0){
             progressBarLoad.visibility = View.VISIBLE
@@ -89,7 +98,7 @@ class MoviesFragment : Fragment() {
         }
 
         if (!initiate){
-            moviesAdapter = MoviesAdapter(MoviesClick {
+            moviesAdapter = MoviesAdapter(type,MoviesClick {
                 if(checkNetworkAvailable()) {
                     this.findNavController().navigate(
                         BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it)
@@ -98,11 +107,16 @@ class MoviesFragment : Fragment() {
                     Toast.makeText(context,"No internet",Toast.LENGTH_SHORT).show()
                 }
             })
+
+        }
+
+        if (type == 1){
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }else{
+            recyclerView.layoutManager = GridLayoutManager(context,3)
         }
 
         recyclerView.adapter = moviesAdapter
-
-        recyclerView.layoutManager = GridLayoutManager(context,3)
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -127,6 +141,8 @@ class MoviesFragment : Fragment() {
             if (it!=filter && it!=null ) {
                 dataPrimary = ArrayList()
                 filter = it
+                viewModel.movieTheaterPage = 0
+                viewModel.moviePage = 0
                 viewModel.getFilter()
                 initiate = true
             }else if(it==null){
@@ -144,6 +160,7 @@ class MoviesFragment : Fragment() {
                     dataPrimary.add(i)
                 }
                 moviesAdapter.submitList(dataPrimary)
+                viewModel.done()
                 progressBar.visibility = View.GONE
                 progressBarLoad.visibility = View.GONE
                 imageViewNoInternet.visibility = View.GONE
@@ -163,9 +180,4 @@ class MoviesFragment : Fragment() {
         } else false
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.moviePage = 0
-        viewModel.movieTheaterPage = 0
-    }
 }

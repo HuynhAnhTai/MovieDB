@@ -43,7 +43,7 @@
             <ImageView
                 android:id="@+id/iv_posster_movies_details_fragment"
                 android:layout_width="100dp"
-                android:layout_height="130dp"
+                android:layout_height="150dp"
                 android:adjustViewBounds="true"
                 android:src="@drawable/captainamerica"
                 android:layout_below="@id/iv_back_movies_details_movies_fragment"
@@ -78,6 +78,20 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
                  />
+
+            <Button
+                android:id="@+id/bt_trailer_video_detals_movies_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_below="@id/tv_genres_movies_details_fragment"
+                android:layout_toRightOf="@id/iv_posster_movies_details_fragment"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="5dp"
+                android:textSize="10sp"
+                android:text="Trailer"
+                android:background="@drawable/bt_trailer"
+                android:textColor="@android:color/white"
+            />
 
             <View
                 android:id="@+id/view_detail_fragment"
@@ -147,6 +161,7 @@
                 android:layout_below="@id/view_2_detail_fragment"
                 android:visibility="visible"
                 />
+
     </RelativeLayout>
 
 </ScrollView>

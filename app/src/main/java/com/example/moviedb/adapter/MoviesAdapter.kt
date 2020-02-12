@@ -16,17 +16,15 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class MoviesAdapter(val filmClick: MoviesClick) :ListAdapter<MoviesTopRatedResults,ItemMoviesHolder>(MoviesDiffCallBack()){
-
+class MoviesAdapter(var type: Int,val filmClick: MoviesClick) :ListAdapter<MoviesTopRatedResults,ItemMoviesHolder>(MoviesDiffCallBack()){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemMoviesHolder {
-
-        return ItemMoviesHolder.from(parent)
+        return ItemMoviesHolder.from(parent, type)
     }
 
     override fun onBindViewHolder(holder: ItemMoviesHolder, position: Int) {
         var item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, type)
         holder.itemView.setOnClickListener {
             filmClick.onClick(item)
         }

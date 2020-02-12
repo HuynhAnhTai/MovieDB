@@ -8,5 +8,17 @@ data class MovieByIdResponse(
     val overview: String,
     val poster_path: String,
     val title: String,
-    val vote_average: Float
+    val vote_average: Float,
+    val videos: Videos
+)
+
+data class Videos(
+    var results: ArrayList<DetailVideo>
+)
+
+data class DetailVideo(
+    var id: String,
+    var key: String,
+    var site: String,
+    var name: String
 )
