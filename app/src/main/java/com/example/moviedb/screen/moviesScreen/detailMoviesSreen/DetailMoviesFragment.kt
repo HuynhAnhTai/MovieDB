@@ -62,7 +62,7 @@ class DetailMoviesFragment : Fragment() {
         imageViewStarOff = view.findViewById(R.id.iv_start_off_detal_movies_fragment)
         imageViewStarOn = view.findViewById(R.id.iv_start_on_detal_movies_fragment)
         textViewStillUpdate = view.findViewById(R.id.tv_still_update_details_movies_framgnet)
-        bt_trailer = view.findViewById(R.id.bt_trailer_video_detals_movies_fragment);
+        bt_trailer = view.findViewById(R.id.bt_trailer_video_detals_movies_fragment)
 
         recyclerView.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
 

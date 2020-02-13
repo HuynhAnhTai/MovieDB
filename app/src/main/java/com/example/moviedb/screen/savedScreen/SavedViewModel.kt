@@ -16,8 +16,4 @@ class SavedViewModel(application: Application) : AndroidViewModel(application) {
     private var moviesRepository = MovieRepository(getApplication())
 
     val movieSave : LiveData<List<MoviesEntity>> = moviesRepository.movieSave
-
-    override fun onCleared() {
-        super.onCleared()
-    }
 }

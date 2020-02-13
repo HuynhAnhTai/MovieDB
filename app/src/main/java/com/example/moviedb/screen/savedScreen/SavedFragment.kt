@@ -1,5 +1,7 @@
 package com.example.moviedb.screen.savedScreen
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -29,11 +31,15 @@ class SavedFragment : Fragment() {
 
     private var initiate = false
 
+    private lateinit var sharedPref : SharedPreferences
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view = inflater.inflate(R.layout.saved_fragment, container, false)
+
+        sharedPref = activity?.getSharedPreferences("id",Context.MODE_PRIVATE)!!
 
         recyclerView = view.findViewById(R.id.recyler_view_save_fragment)
 
@@ -53,10 +59,25 @@ class SavedFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(SavedViewModel::class.java)
 
+        var listId: String = ""
+
         viewModel.movieSave.observe(viewLifecycleOwner, Observer {
             if (it.size >= 0){
                 initiate = true
                 adapter.submitList(it)
+
+                for (i in it){
+                    if (it.get(it.size-1).id == i.id){
+                        listId = i.id.toString()
+                    }else{
+                        listId = i.id.toString()+","
+                    }
+                }
+                with(sharedPref.edit()) {
+                    putString("IdSaveMovie", listId)
+                    commit()
+
+                }
             }
         })
     }
