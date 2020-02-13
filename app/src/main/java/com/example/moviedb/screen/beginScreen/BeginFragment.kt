@@ -2,6 +2,7 @@ package com.example.moviedb.beginScreen
 
 import android.content.ClipData
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
@@ -17,7 +18,7 @@ import com.example.moviedb.R
 import com.example.moviedb.adapter.PagerAdapter
 import com.example.moviedb.moviesScreen.MoviesFragment
 import com.google.android.material.tabs.TabLayout
-
+import java.lang.NullPointerException
 
 
 class BeginFragment : Fragment() {
@@ -38,6 +39,7 @@ class BeginFragment : Fragment() {
     private lateinit var itemSearch: MenuItem
     private lateinit var itemFilter: MenuItem
 
+    private lateinit var sharedPref :SharedPreferences
 
     private  var item: Int = 5
     override fun onCreateView(
@@ -53,13 +55,7 @@ class BeginFragment : Fragment() {
         itemSearch = toolbar.menu.findItem(R.id.menu_search)
         itemFilter = toolbar.menu.findItem(R.id.menu_filter)
 
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-        if (sharedPref!!.getInt("Type", 3)!=1) {
-            with(sharedPref!!.edit()) {
-                putInt("Type", 3)
-                commit()
-            }
-        }
+        sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
 
         toolbar.setOnMenuItemClickListener {
             when(it.itemId){
@@ -72,7 +68,6 @@ class BeginFragment : Fragment() {
                     true
                 }
                 else -> {
-
                     if (sharedPref != null) {
                         val type = sharedPref.getInt("Type", 3)
                         if (type == 3) {
@@ -80,11 +75,13 @@ class BeginFragment : Fragment() {
                                 putInt("Type", 1)
                                 commit()
                             }
+                            viewModel.updateType(1)
                         }else{
                             with(sharedPref.edit()) {
                                 putInt("Type", 3)
                                 commit()
                             }
+                            viewModel.updateType(3)
                         }
                     }
                     true
@@ -125,11 +122,23 @@ class BeginFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(BeginViewModel::class.java)
         // TODO: Use the ViewModel
-//        viewModel.genresDB.observe(viewLifecycleOwner, Observer {
-//            if (it.size>0){
-//                Toast.makeText(context, it.size.toString(), Toast.LENGTH_LONG).show()
-//            }
-//        })
+        try {
+            if (sharedPref!!.getInt("Type", 3) != 1) {
+                with(sharedPref!!.edit()) {
+                    putInt("Type", 3)
+                    commit()
+                }
+                viewModel.updateType(3)
+            } else {
+                viewModel.updateType(1)
+            }
+        }catch (e: NullPointerException){
+            with(sharedPref!!.edit()) {
+                putInt("Type", 3)
+                commit()
+            }
+            viewModel.updateType(3)
+        }
         item++
     }
 

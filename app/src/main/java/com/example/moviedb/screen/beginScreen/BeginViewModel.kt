@@ -14,8 +14,15 @@ import kotlinx.coroutines.*
 class BeginViewModel(application: Application) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
     private var filterRepository = FilterRepository(getApplication())
+
+    val type = MutableLiveData<Int>()
+
     init {
         getGenres()
+    }
+
+    fun updateType(type: Int){
+        this.type.value = type
     }
 
     private fun getGenres(){

@@ -27,6 +27,7 @@ import com.example.moviedb.R
 import com.example.moviedb.adapter.MoviesAdapter
 import com.example.moviedb.adapter.MoviesClick
 import com.example.moviedb.beginScreen.BeginFragmentDirections
+import com.example.moviedb.beginScreen.BeginViewModel
 import com.example.moviedb.db.FilterEntity
 import com.example.moviedb.modelAPI.MoviesTopRatedResults
 import com.squareup.picasso.NetworkPolicy
@@ -43,6 +44,7 @@ class MoviesFragment : Fragment() {
         fun newInstance() = MoviesFragment()
     }
     private lateinit var viewModel: MoviesViewModel
+    private lateinit var viewModelBegin: BeginViewModel
 
     private lateinit var progressBar: ProgressBar
     private lateinit var progressBarLoad: ProgressBar
@@ -53,8 +55,7 @@ class MoviesFragment : Fragment() {
 
     private var dataPrimary: MutableList<MoviesTopRatedResults> = ArrayList()
 
-    private var initiate = false
-    private var type = 1
+    private var type = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,15 +70,11 @@ class MoviesFragment : Fragment() {
         imageViewNoInternet = view.findViewById(R.id.iv_no_internet_movie)
         buttonRetry = view.findViewById(R.id.bt_retry_movie)
 
-        val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-
-        type = sharedPref!!.getInt("Type",3)
-
-        if (dataPrimary.size==0){
+        if (dataPrimary.size == 0) {
             progressBarLoad.visibility = View.VISIBLE
         }
 
-        if(!checkNetworkAvailable()){
+        if (!checkNetworkAvailable()) {
             Picasso.get().load("https://art.pixilart.com/c448e718203e765.png")
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(imageViewNoInternet)
@@ -87,47 +84,35 @@ class MoviesFragment : Fragment() {
         }
 
         buttonRetry.setOnClickListener {
-            if(checkNetworkAvailable()) {
+            if (checkNetworkAvailable()) {
                 progressBarLoad.visibility = View.VISIBLE
                 imageViewNoInternet.visibility = View.GONE
                 buttonRetry.visibility = View.GONE
                 viewModel.getFilter()
-            }else{
-                Toast.makeText(context,"No internet",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "No internet", Toast.LENGTH_SHORT).show()
             }
         }
-
-        if (!initiate){
-            moviesAdapter = MoviesAdapter(type,MoviesClick {
-                if(checkNetworkAvailable()) {
-                    this.findNavController().navigate(
-                        BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it)
-                    )
-                }else{
-                    Toast.makeText(context,"No internet",Toast.LENGTH_SHORT).show()
-                }
-            })
-
-        }
-
-        if (type == 1){
-            recyclerView.layoutManager = LinearLayoutManager(context)
-        }else{
-            recyclerView.layoutManager = GridLayoutManager(context,3)
-        }
-
-        recyclerView.adapter = moviesAdapter
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (! recyclerView!!.canScrollVertically(1)){ //1 for down
-                        progressBar.visibility = View.VISIBLE
-                        viewModel.getFilter()
+                if (!recyclerView!!.canScrollVertically(1)) { //1 for down
+                    progressBar.visibility = View.VISIBLE
+                    viewModel.getFilter()
                 }
             }
         })
+
+        try{
+            if(moviesAdapter.itemCount>0){
+                recyclerView.adapter = moviesAdapter
+                setType()
+            }
+        }catch (e: UninitializedPropertyAccessException){
+
+        }
 
         return view
     }
@@ -135,8 +120,15 @@ class MoviesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProviders.of(activity!!).get(MoviesViewModel::class.java)
+        viewModelBegin = ViewModelProviders.of(activity!!).get(BeginViewModel::class.java)
 
         // TODO: Use the ViewModel
+        viewModelBegin.type.observe(viewLifecycleOwner, Observer {
+            if (it!=type) {
+                updateTypeRecyclerview(it)
+            }
+        })
+
         viewModel.filter_all.observe(viewLifecycleOwner, Observer {
             if (it!=filter && it!=null ) {
                 dataPrimary = ArrayList()
@@ -144,11 +136,9 @@ class MoviesFragment : Fragment() {
                 viewModel.movieTheaterPage = 0
                 viewModel.moviePage = 0
                 viewModel.getFilter()
-                initiate = true
             }else if(it==null){
                 dataPrimary = ArrayList()
                 viewModel.getFilter()
-                initiate = true
             }
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
@@ -170,6 +160,33 @@ class MoviesFragment : Fragment() {
                 progressBarLoad.visibility = View.GONE
             }
         })
+    }
+
+    private fun updateTypeRecyclerview(it: Int) {
+        type = it
+
+        moviesAdapter = MoviesAdapter(type, MoviesClick {
+            if (checkNetworkAvailable()) {
+                this.findNavController().navigate(
+                    BeginFragmentDirections.actionBeginFragmentToDetailMoviesFragment(it)
+                )
+            } else {
+                Toast.makeText(context, "No internet", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        setType()
+
+        recyclerView.adapter = moviesAdapter
+        moviesAdapter.submitList(dataPrimary)
+    }
+
+    private fun setType(){
+        if (type == 1){
+            recyclerView.layoutManager = LinearLayoutManager(context)
+        }else{
+            recyclerView.layoutManager = GridLayoutManager(context,3)
+        }
     }
 
     fun checkNetworkAvailable(): Boolean {
