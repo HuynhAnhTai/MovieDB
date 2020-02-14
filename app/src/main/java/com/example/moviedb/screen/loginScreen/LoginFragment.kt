@@ -17,7 +17,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 import com.example.moviedb.R
+import com.example.moviedb.beginScreen.BeginFragment
 import com.google.firebase.auth.FirebaseAuth
+
 
 @Suppress("DEPRECATION")
 class LoginFragment : Fragment() {
@@ -88,6 +90,7 @@ class LoginFragment : Fragment() {
             if (it!=null){
                 if (it){
                     this.findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToBeginFragment())
+
                 }else{
                     Toast.makeText(context,"Please verify email",Toast.LENGTH_SHORT).show()
                 }

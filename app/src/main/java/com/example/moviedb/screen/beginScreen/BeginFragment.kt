@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.lang.NullPointerException
 
 
+@Suppress("DEPRECATION")
 class BeginFragment : Fragment() {
 
     companion object {
@@ -49,6 +50,7 @@ class BeginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         var view: View = inflater.inflate(R.layout.begin_fragment, container, false)
 
         tabLayout = view.findViewById(R.id.tab_layout_begin_fragment)
@@ -71,8 +73,11 @@ class BeginFragment : Fragment() {
                     true
                 }
                 R.id.menu_sign_out->{
+
+                    viewModel.deleteAllMovieDB()
                     mAuth.signOut()
                     this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToLoginFragment())
+
                     true
                 }
                 else -> {
@@ -148,13 +153,5 @@ class BeginFragment : Fragment() {
             viewModel.updateType(3)
         }
         item++
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }

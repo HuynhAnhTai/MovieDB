@@ -3,17 +3,21 @@ package com.example.moviedb.moviesScreen.detailMoviesSreen
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.moviedb.db.MoviesEntity
-import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.CreditByIdFilmResponse
 import com.example.moviedb.modelAPI.MovieByIdResponse
 import com.example.moviedb.modelAPI.Videos
 import com.example.moviedb.repository.MovieRepository
-import com.example.moviedb.restAPI.API
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.*
 import java.lang.Exception
 
 class DetailMoviesViewModel(application: Application) : AndroidViewModel(application) {
     private var movieRepository = MovieRepository(getApplication())
+
+    private var movieRef: DatabaseReference = FirebaseDatabase.getInstance().reference
+    private var mAuth : FirebaseAuth = FirebaseAuth.getInstance()
 
     private val _detailMovie = MutableLiveData<MovieByIdResponse>()
 
@@ -83,14 +87,37 @@ class DetailMoviesViewModel(application: Application) : AndroidViewModel(applica
 
     fun insertMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
+            uploadDatabase(moviesEntity)
             movieRepository.insertMovieToDB(moviesEntity)
-
-            _back.value = true
         }
     }
 
+
+    fun uploadDatabase(moviesEntity: MoviesEntity){
+        var hashMap = HashMap<String,Any>()
+        hashMap.put("id",moviesEntity.id)
+        hashMap.put("poster_path",moviesEntity.poster_path)
+        hashMap.put("backdrop_path",moviesEntity.backdrop_path)
+        hashMap.put("genres",moviesEntity.genres)
+        hashMap.put("overview",moviesEntity.overview)
+        hashMap.put("title",moviesEntity.title)
+        hashMap.put("adult",moviesEntity.adult)
+        hashMap.put("vote_average",moviesEntity.vote_average)
+
+        movieRef.child("SaveMovie").child(mAuth.currentUser!!.uid)
+            .child(moviesEntity.id.toString()).updateChildren(hashMap).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    _back.value = true
+                }
+            }
+    }
+
+
     fun deleteMovie(moviesEntity: MoviesEntity){
         viewModelScope.launch {
+            movieRef.child("SaveMovie").child(mAuth.currentUser!!.uid)
+                .child(moviesEntity.id.toString()).removeValue()
+
             movieRepository.deleteMovieFromDB(moviesEntity.id)
 
             _back.value = true

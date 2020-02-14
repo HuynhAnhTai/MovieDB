@@ -68,6 +68,12 @@ class MovieRepository (private val application: Application){
         return value
     }
 
+    suspend fun deleteAllMovieDB (){
+        withContext(Dispatchers.IO){
+            getDatabaseMovie(application).dao.deleteAllMovieEntity()
+        }
+    }
+
     suspend fun getCastMovieByIdFilm(id: Long): CreditByIdFilmResponse {
         var value = CreditByIdFilmResponse(0, ArrayList())
         withContext(Dispatchers.IO){

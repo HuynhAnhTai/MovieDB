@@ -34,4 +34,7 @@ interface DAO {
     @Query("select * from GenresEntity")
     fun getGenres(): LiveData<List<GenresEntity>>
 
+    @Query("DELETE FROM MoviesEntity")
+    fun deleteAllMovieEntity()
+
 }

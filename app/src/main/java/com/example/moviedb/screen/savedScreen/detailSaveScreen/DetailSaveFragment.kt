@@ -2,6 +2,7 @@ package com.example.moviedb.screen.savedScreen.detailSaveScreen
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -40,19 +41,40 @@ class DetailSaveFragment : Fragment() {
         imageViewStarOff.setOnClickListener {
             imageViewStarOff.visibility = View.GONE
             imageViewStarOn.visibility = View.VISIBLE
-
-            viewModel.insertMovie(moviesEntity)
         }
 
         imageViewStarOn.setOnClickListener {
             imageViewStarOff.visibility = View.VISIBLE
             imageViewStarOn.visibility = View.GONE
-
-            viewModel.deleteMovie(moviesEntity)
         }
 
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(view == null){
+            return
+        }
+        view!!.isFocusableInTouchMode = true
+        view!!.requestFocus()
+        view!!.setOnKeyListener { view, i, keyEvent ->
+            if(keyEvent.action == KeyEvent.ACTION_UP && i == KeyEvent.KEYCODE_BACK){
+                if (imageViewStarOff.visibility == View.VISIBLE){
+                    viewModel.deleteMovie(moviesEntity)
+                }else{
+                    true
+                }
+                viewModel.back.observe(viewLifecycleOwner, Observer {
+                    if(it==true){
+                        true
+                    }
+                })
+            }
+
+            false
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

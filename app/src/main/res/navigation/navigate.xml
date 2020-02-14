@@ -49,7 +49,9 @@
             app:popUpTo="@+id/beginFragment" />
         <action
             android:id="@+id/action_beginFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@+id/beginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationPeopleFragment"
@@ -91,7 +93,9 @@
         tools:layout="@layout/login_fragment" >
         <action
             android:id="@+id/action_loginFragment_to_beginFragment"
-            app:destination="@id/beginFragment" />
+            app:destination="@id/beginFragment"
+            app:popUpTo="@+id/loginFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_createAccountFragment"
             app:destination="@id/createAccountFragment" />

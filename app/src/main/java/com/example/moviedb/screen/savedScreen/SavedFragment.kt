@@ -18,6 +18,7 @@ import com.example.moviedb.adapter.SaveMovieAdapter
 import com.example.moviedb.adapter.SaveMoviesClick
 import com.example.moviedb.beginScreen.BeginFragmentDirections
 
+@Suppress("DEPRECATION")
 class SavedFragment : Fragment() {
 
     companion object {
@@ -30,6 +31,7 @@ class SavedFragment : Fragment() {
     private lateinit var adapter: SaveMovieAdapter
 
     private var initiate = false
+    private var initiateFirebase = false
 
     private lateinit var sharedPref : SharedPreferences
 
@@ -63,9 +65,15 @@ class SavedFragment : Fragment() {
 
         viewModel.movieSave.observe(viewLifecycleOwner, Observer {
             if (it.size >= 0){
-                initiate = true
-                adapter.submitList(it)
 
+                if (!initiateFirebase) {
+                    viewModel.checkDataFirebase()
+                    viewModel.conpareFlim(it)
+                    initiateFirebase = true
+                }
+
+                adapter.submitList(it)
+                initiate = true
                 for (i in it){
                     if (it.get(it.size-1).id == i.id){
                         listId = i.id.toString()
@@ -76,13 +84,10 @@ class SavedFragment : Fragment() {
                 with(sharedPref.edit()) {
                     putString("IdSaveMovie", listId)
                     commit()
-
                 }
             }
         })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
+
 }

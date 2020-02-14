@@ -8,13 +8,14 @@ import com.example.moviedb.db.getDatabaseMovie
 import com.example.moviedb.modelAPI.Genres
 import com.example.moviedb.modelAPI.GenresReponse
 import com.example.moviedb.repository.FilterRepository
+import com.example.moviedb.repository.MovieRepository
 import com.example.moviedb.restAPI.API
 import kotlinx.coroutines.*
 
 class BeginViewModel(application: Application) : AndroidViewModel(application) {
     // TODO: Implement the ViewModel
     private var filterRepository = FilterRepository(getApplication())
-
+    private var movieRepository = MovieRepository(getApplication())
     val type = MutableLiveData<Int>()
 
     init {
@@ -42,6 +43,12 @@ class BeginViewModel(application: Application) : AndroidViewModel(application) {
                     filterRepository.insertGenresToRoomDB(genresEntity)
                 }
             }
+        }
+    }
+
+    fun deleteAllMovieDB(){
+        viewModelScope.launch {
+            movieRepository.deleteAllMovieDB()
         }
     }
 
