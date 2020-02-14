@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.example.moviedb.MainActivity
 import android.app.NotificationChannel
-import android.R
 import java.util.*
 
 

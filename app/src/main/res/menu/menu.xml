@@ -2,7 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+    <item
+        android:id="@+id/menu_sign_out"
+        app:showAsAction="ifRoom|withText"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="Sign Out"
+        />
 
+    <item
+        android:id="@+id/menu_type"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        app:showAsAction="ifRoom|withText"
+        android:title="Type Watch" />
     <item
         android:id="@+id/menu_search"
         android:icon="@android:drawable/ic_search_category_default"
@@ -10,17 +21,13 @@
         android:title="Search" />
 
     <item
-        android:id="@+id/menu_type"
-        android:icon="@android:drawable/ic_dialog_dialer"
-        app:showAsAction="ifRoom|withText"
-        android:title="Type Watch" />
-
-    <item
         android:id="@+id/menu_filter"
         app:showAsAction="ifRoom|withText"
         android:icon="@android:drawable/ic_menu_more"
         android:title="Filter"
         />
+
+
 
 
 

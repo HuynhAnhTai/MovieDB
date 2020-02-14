@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigate"
-    app:startDestination="@+id/beginFragment">
+    app:startDestination="@+id/loginFragment">
 
     <fragment
         android:id="@+id/detailMoviesFragment"
@@ -47,6 +47,9 @@
             android:id="@+id/action_beginFragment_to_searchFragment"
             app:destination="@id/searchFragment"
             app:popUpTo="@+id/beginFragment" />
+        <action
+            android:id="@+id/action_beginFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailInformationPeopleFragment"
@@ -81,4 +84,33 @@
             app:destination="@id/detailMoviesFragment"
             app:popUpTo="@+id/searchFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.moviedb.screen.loginScreen.LoginFragment"
+        android:label="login_fragment"
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_beginFragment"
+            app:destination="@id/beginFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="com.example.moviedb.screen.createAccountScreen.CreateAccountFragment"
+        android:label="create_account_fragment"
+        tools:layout="@layout/create_account_fragment" >
+        <action
+            android:id="@+id/action_createAccountFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.moviedb.screen.forgotPasswordScreen.ForgotPasswordFragment"
+        android:label="forgot_password_fragment"
+        tools:layout="@layout/forgot_password_fragment" />
 </navigation>

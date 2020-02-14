@@ -46,7 +46,8 @@ class MainActivity : AppCompatActivity() {
         val timeDiff = dueDate.timeInMillis - currentDate.timeInMillis
 
         val dailyWorkRequest = OneTimeWorkRequest.Builder(UpdateMovieSaveWorker::class.java)
-            .setConstraints(constraints) .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+            .setConstraints(constraints)
+            .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
             .build()
 
         WorkManager.getInstance(applicationContext).enqueue(dailyWorkRequest)

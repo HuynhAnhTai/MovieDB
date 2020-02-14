@@ -18,6 +18,7 @@ import com.example.moviedb.R
 import com.example.moviedb.adapter.PagerAdapter
 import com.example.moviedb.moviesScreen.MoviesFragment
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import java.lang.NullPointerException
 
 
@@ -42,6 +43,8 @@ class BeginFragment : Fragment() {
     private lateinit var sharedPref :SharedPreferences
 
     private  var item: Int = 5
+
+    private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,6 +68,11 @@ class BeginFragment : Fragment() {
                 }
                 R.id.menu_filter -> {
                     this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToFilterFragment())
+                    true
+                }
+                R.id.menu_sign_out->{
+                    mAuth.signOut()
+                    this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToLoginFragment())
                     true
                 }
                 else -> {
