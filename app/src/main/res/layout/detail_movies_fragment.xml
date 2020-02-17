@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".moviesScreen.detailMoviesSreen.DetailMoviesFragment">
 
-    <RelativeLayout
+    <ScrollView
+        android:id="@+id/scroll_view_detail_movies_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-        <ImageView
-            android:id="@+id/iv_back_movies_details_movies_fragment"
+        android:visibility="gone">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/captainamerica"
-            />
+            android:layout_height="match_parent"
+            >
+
+            <ImageView
+                android:id="@+id/iv_back_movies_details_movies_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                />
 
 
-        <ImageView
-            android:id="@+id/iv_start_off_detal_movies_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/btn_star_big_off"
-            android:layout_alignParentEnd="true"
-            android:layout_margin="15dp"
-            />
+            <ImageView
+                android:id="@+id/iv_start_off_detal_movies_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/btn_star_big_off"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="15dp"
+                />
 
 
-        <ImageView
-            android:id="@+id/iv_start_on_detal_movies_fragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/btn_star_big_on"
-            android:layout_margin="15dp"
-            android:layout_alignParentEnd="true"
-            android:visibility="gone"
-            />
+            <ImageView
+                android:id="@+id/iv_start_on_detal_movies_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/btn_star_big_on"
+                android:layout_margin="15dp"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                />
 
             <ImageView
                 android:id="@+id/iv_posster_movies_details_fragment"
                 android:layout_width="100dp"
                 android:layout_height="150dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/captainamerica"
                 android:layout_below="@id/iv_back_movies_details_movies_fragment"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="5dp"
@@ -56,7 +59,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="Captain Ameriaca"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="14sp"
@@ -71,13 +73,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="Action, Mystery, Science Fiction, Thriller"
                 android:textSize="12sp"
                 android:layout_below="@id/tv_name_movies_details_fragment"
                 android:layout_toRightOf="@id/iv_posster_movies_details_fragment"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="5dp"
-                 />
+                />
 
             <Button
                 android:id="@+id/bt_trailer_video_detals_movies_fragment"
@@ -91,7 +92,7 @@
                 android:text="Trailer"
                 android:background="@drawable/bt_trailer"
                 android:textColor="@android:color/white"
-            />
+                />
 
             <View
                 android:id="@+id/view_detail_fragment"
@@ -109,11 +110,11 @@
                 android:id="@+id/tv_overview_movie_detail_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:text="Raj is a rich, carefree, happy-go-lucky second generation NRI. Simran is the daughter of Chaudhary Baldev Singh, who in spite of being an NRI is very strict about adherence to Indian values. Simran has left for India to be married to her childhood fiancé. Raj leaves for India with a mission at his hands, to claim his lady love under the noses of her whole family. Thus begins a saga."
                 android:layout_below="@id/view_detail_fragment"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="5dp"
+                android:fontFamily="@font/amethysta"
                 />
 
             <TextView
@@ -161,7 +162,15 @@
                 android:layout_below="@id/view_2_detail_fragment"
                 android:visibility="visible"
                 />
+        </RelativeLayout>
+    </ScrollView>
 
-    </RelativeLayout>
+    <ProgressBar
+        android:id="@+id/progressBar_load_detail_movies_fragment"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true" />
 
-</ScrollView>
+</RelativeLayout>

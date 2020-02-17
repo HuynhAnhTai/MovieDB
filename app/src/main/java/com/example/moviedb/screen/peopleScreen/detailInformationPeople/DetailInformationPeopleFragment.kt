@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.lifecycle.Observer
 
 import com.example.moviedb.R
@@ -43,10 +44,16 @@ class DetailInformationPeopleFragment : Fragment() {
 
     private fun loadData(it: PersonInfoResponse) {
         if (it.profile_path!=null){
-            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.profile_path).into(iv_picture_profile_detail_information_people_fragment)
+            Picasso.get().load("https://image.tmdb.org/t/p/w500/"+it.profile_path)
+                .centerCrop()
+                .fit()
+                .into(iv_picture_profile_detail_information_people_fragment)
         }else{
             Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuErL5FJbhFsb_E5fB7HI5uxuDn3EaxiJfDXxeqjZW" +
-                    "CMSgwGJ7&s").into(iv_picture_profile_detail_information_people_fragment)
+                    "CMSgwGJ7&s")
+                .centerCrop()
+                .fit()
+                .into(iv_picture_profile_detail_information_people_fragment)
         }
 
         tv_name_people_detail_information_fragment.text = it.name
@@ -70,7 +77,8 @@ class DetailInformationPeopleFragment : Fragment() {
         }else{
             tv_overview_people_detail_fragment.text = it.biography
         }
-
+        scroll_view_detail_people_fragment.visibility = View.VISIBLE
+        progressBar_load_detail_people_fragment.visibility = View.GONE
     }
 
 

@@ -7,12 +7,14 @@
     tools:context=".peopleScreen.detailInformationPeople.DetailInformationPeopleFragment">
 
     <ScrollView
+        android:id="@+id/scroll_view_detail_people_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         >
             <RelativeLayout
                 android:id="@+id/contraint_detail_people"
@@ -24,8 +26,6 @@
                     android:id="@+id/iv_picture_profile_detail_information_people_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/captainamerica"
                    />
 
                 <TextView
@@ -37,7 +37,6 @@
                     android:layout_marginEnd="5dp"
                     android:textStyle="bold"
                     android:textSize="20sp"
-                    android:text="Liam Nesson"
                     android:textColor="@android:color/black"
                     android:layout_below="@id/iv_picture_profile_detail_information_people_fragment"
                     />
@@ -83,11 +82,21 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
+                    android:fontFamily="@font/amethysta"
                     />
-
             </RelativeLayout>
-
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar_load_detail_people_fragment"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:indeterminate="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

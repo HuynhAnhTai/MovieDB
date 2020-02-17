@@ -140,4 +140,9 @@ class PeopleFragment : Fragment() {
         } else false
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        data = ArrayList()
+        initiate = false
+    }
 }

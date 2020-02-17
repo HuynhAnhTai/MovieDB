@@ -129,4 +129,11 @@ class SeriesFragment : Fragment() {
             networkInfo?.isConnected ?: false
         } else false
     }
+
+    override fun onDetach() {
+        super.onDetach()
+        data = ArrayList()
+
+        initiate = false
+    }
 }

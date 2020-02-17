@@ -8,9 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +24,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
-import android.widget.Toast
+import android.widget.*
 
 
 @Suppress("DEPRECATION")
@@ -44,6 +41,8 @@ class DetailMoviesFragment : Fragment() {
     private lateinit var imageViewStarOn: ImageView
     private lateinit var textViewStillUpdate: TextView
     private lateinit var bt_trailer: Button
+    private lateinit var scroll_view: ScrollView
+    private lateinit var progress_bar_load: ProgressBar
 
     private lateinit var adapter: CastMovieAdapter
 
@@ -58,7 +57,8 @@ class DetailMoviesFragment : Fragment() {
         var view: View = inflater.inflate(R.layout.detail_movies_fragment, container, false)
 
         recyclerView = view.findViewById(R.id.recyler_view_cast_detail_movie_fragment)
-
+        scroll_view = view.findViewById(R.id.scroll_view_detail_movies_fragment)
+        progress_bar_load = view.findViewById(R.id.progressBar_load_detail_movies_fragment)
         imageViewStarOff = view.findViewById(R.id.iv_start_off_detal_movies_fragment)
         imageViewStarOn = view.findViewById(R.id.iv_start_on_detal_movies_fragment)
         textViewStillUpdate = view.findViewById(R.id.tv_still_update_details_movies_framgnet)
@@ -165,6 +165,7 @@ class DetailMoviesFragment : Fragment() {
     }
 
     fun loadData(it: MovieByIdResponse){
+
         var backdrop_path: String = ""
         if (it.backdrop_path==null){
             Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTX70gC9QJxGtg6XcQEb4t793LTfR8M5nOcJ-ZoxW6ZNI29B93N").fit().into(iv_back_movies_details_movies_fragment)
@@ -212,6 +213,8 @@ class DetailMoviesFragment : Fragment() {
         if (it.videos.results.size>0){
             urlTrailer = it.videos.results.get(0).key
         }
+        progress_bar_load.visibility = View.GONE
+        scroll_view.visibility = View.VISIBLE
 
         moviesEntity = MoviesEntity(it.adult,backdrop_path, genres, it.id, overview, poster_path, it.title, it.vote_average)
     }

@@ -19,10 +19,16 @@ class ItemCastMovieHolder private constructor(view: View): RecyclerView.ViewHold
         textViewNameFilm.text = castOfFlim.name
         if (castOfFlim.profile_path == null){
             Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuErL5FJbhFsb_E5fB7HI5uxuDn3EaxiJfDXxeqjZW" +
-                    "CMSgwGJ7&s").transform(CircleTransform()).fit().into(imageActor)
+                    "CMSgwGJ7&s").transform(CircleTransform())
+                .fit()
+                .centerInside()
+                .into(imageActor)
         }else {
             Picasso.get().load("https://image.tmdb.org/t/p/w500" + castOfFlim.profile_path)
-                .transform(CircleTransform()).fit().into(imageActor)
+                .transform(CircleTransform())
+                .fit()
+                .centerInside()
+                .into(imageActor)
         }
     }
 

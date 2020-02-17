@@ -142,9 +142,9 @@ class MoviesFragment : Fragment() {
             }
         })
         viewModel.movies.observe(viewLifecycleOwner, Observer {
-            if(it.size>0){
-                for (i in it){
-                    if (i==null){
+            if(it.size>0) {
+                for (i in it) {
+                    if (i == null) {
                         continue
                     }
                     dataPrimary.add(i)
@@ -154,10 +154,6 @@ class MoviesFragment : Fragment() {
                 progressBar.visibility = View.GONE
                 progressBarLoad.visibility = View.GONE
                 imageViewNoInternet.visibility = View.GONE
-            }
-            else if(it.size==0){
-                progressBar.visibility = View.GONE
-                progressBarLoad.visibility = View.GONE
             }
         })
     }
@@ -197,4 +193,10 @@ class MoviesFragment : Fragment() {
         } else false
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        filter = FilterEntity(0,"","","","")
+        dataPrimary = ArrayList()
+        type = 0
+    }
 }
