@@ -17,6 +17,10 @@ import androidx.viewpager.widget.ViewPager
 import com.example.moviedb.R
 import com.example.moviedb.adapter.PagerAdapter
 import com.example.moviedb.moviesScreen.MoviesFragment
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 import java.lang.NullPointerException
@@ -43,6 +47,9 @@ class BeginFragment : Fragment() {
 
     private lateinit var sharedPref :SharedPreferences
 
+    private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var gso: GoogleSignInOptions
+
     private  var item: Int = 5
 
     private var mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -62,6 +69,14 @@ class BeginFragment : Fragment() {
 
         sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)!!
 
+        gso = GoogleSignInOptions
+            .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(activity!!,gso)
+
         toolbar.setOnMenuItemClickListener {
             when(it.itemId){
                 R.id.menu_search -> {
@@ -76,6 +91,8 @@ class BeginFragment : Fragment() {
 
                     viewModel.deleteAllMovieDB()
                     mAuth.signOut()
+                    LoginManager.getInstance().logOut()
+                    mGoogleSignInClient.signOut()
                     this.findNavController().navigate(BeginFragmentDirections.actionBeginFragmentToLoginFragment())
 
                     true

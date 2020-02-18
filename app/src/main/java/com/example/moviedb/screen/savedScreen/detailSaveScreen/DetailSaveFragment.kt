@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 
 import com.example.moviedb.R
 import com.example.moviedb.db.MoviesEntity
@@ -26,6 +27,7 @@ class DetailSaveFragment : Fragment() {
 
     private lateinit var imageViewStarOff: ImageView
     private lateinit var imageViewStarOn: ImageView
+    private lateinit var image_back: ImageView
 
     private lateinit var moviesEntity: MoviesEntity
 
@@ -37,6 +39,11 @@ class DetailSaveFragment : Fragment() {
 
         imageViewStarOff = view.findViewById(R.id.iv_start_off_detal_movies_save_fragment)
         imageViewStarOn = view.findViewById(R.id.iv_start_on_detal_movies_save_fragment)
+        image_back = view.findViewById(R.id.iv_back_details_save_fragment)
+
+        image_back.setOnClickListener {
+            this.findNavController().popBackStack()
+        }
 
         imageViewStarOff.setOnClickListener {
             imageViewStarOff.visibility = View.GONE

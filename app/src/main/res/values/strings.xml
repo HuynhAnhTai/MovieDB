@@ -3,4 +3,7 @@
     <string name="action_adventure"><![CDATA[action & adventure]]></string>
     <string name="sci_fi_fantasy"><![CDATA[sci-fi & fantasy]]></string>
     <string name="war_politics"><![CDATA[war & politics]]></string>
+    <string name="facebook_app_id">203420280776728</string>
+    <string name="fb_login_protocol_scheme">fb203420280776728</string>
+
 </resources>

@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 
 import com.example.moviedb.R
 import com.example.moviedb.modelAPI.PersonInfoResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_information_people_fragment.*
 
+@Suppress("DEPRECATION")
 class DetailInformationPeopleFragment : Fragment() {
 
     companion object {
@@ -22,11 +24,20 @@ class DetailInformationPeopleFragment : Fragment() {
 
     private lateinit var viewModel: DetailInformationPeopleViewModel
 
+    private lateinit var image_back: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.detail_information_people_fragment, container, false)
+        var view = inflater.inflate(R.layout.detail_information_people_fragment, container, false)
+
+        image_back = view.findViewById(R.id.iv_back_details_information_people_fragment)
+
+        image_back.setOnClickListener {
+            this.findNavController().popBackStack()
+        }
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

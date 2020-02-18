@@ -1,11 +1,17 @@
 package com.example.moviedb.screen.loginScreen
 
+import android.app.Application
+import android.widget.Toast
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     private var mAuth : FirebaseAuth = FirebaseAuth.getInstance()
 
@@ -38,8 +44,31 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+    fun loginGoogle(account: GoogleSignInAccount?) {
+        val credential = GoogleAuthProvider.getCredential(account!!.idToken, null)
+        mAuth.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                _verify.value = true
+            }
+        }
+    }
+
+    fun loginFacebook(credential: AuthCredential) {
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    _verify.value = true
+                }
+            }
+    }
+
+
     fun doneSignIn(){
         _verify.value = null
         _wrongPass.value = null
     }
+
+
+
+
 }

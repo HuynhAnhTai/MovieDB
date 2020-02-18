@@ -1,5 +1,7 @@
 package com.example.moviedb
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toolbar
@@ -15,19 +17,44 @@ import java.util.concurrent.TimeUnit
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Base64
+import android.util.Log
 import androidx.work.*
+import com.facebook.FacebookSdk
+import com.facebook.LoggingBehavior
+import com.facebook.appevents.AppEventsLogger
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private lateinit var navController : NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         navController = this.findNavController(R.id.myNavHostFragment)
+        printKeyHash()
 
         setWorker()
+    }
+
+    private fun printKeyHash() {
+        try{
+            val info = packageManager.getPackageInfo("com.example.moviedb",PackageManager.GET_SIGNATURES)
+            for (signature in info.signatures){
+                val md = MessageDigest.getInstance("SHA")
+                md.update(signature.toByteArray())
+                Log.e("KEYHASH",Base64.encodeToString(md.digest(),Base64.DEFAULT))
+            }
+        }catch (e: PackageManager.NameNotFoundException){
+
+        }catch (e: NoSuchAlgorithmException){
+
+        }
     }
 
     private fun setWorker() {
@@ -52,4 +79,5 @@ class MainActivity : AppCompatActivity() {
 
         WorkManager.getInstance(applicationContext).enqueue(dailyWorkRequest)
     }
+
 }

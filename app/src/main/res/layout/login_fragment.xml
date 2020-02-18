@@ -71,12 +71,34 @@
         app:layout_constraintTop_toBottomOf="@id/bt_login_fragment"
         app:layout_constraintStart_toStartOf="parent"
         />
+    <com.google.android.gms.common.SignInButton
+        android:id="@+id/bt_sign_in_google_login_fragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_creat_account_login_fragment"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/bt_sign_in_facebook_login_fragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_sign_in_google_login_fragment"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

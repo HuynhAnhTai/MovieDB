@@ -10,12 +10,12 @@
         android:id="@+id/scroll_view_detail_movies_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             >
-
             <ImageView
                 android:id="@+id/iv_back_movies_details_movies_fragment"
                 android:layout_width="match_parent"
@@ -23,6 +23,14 @@
                 android:adjustViewBounds="true"
                 />
 
+            <ImageView
+                android:id="@+id/iv_back_details_movies_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_back"
+                android:layout_margin="15dp"
+                android:layout_alignParentStart="true"
+                />
 
             <ImageView
                 android:id="@+id/iv_start_off_detal_movies_fragment"

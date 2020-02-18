@@ -21,10 +21,12 @@ import com.example.moviedb.modelAPI.MovieByIdResponse
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.detail_movies_fragment.*
 import android.content.Intent
+import android.media.Image
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.widget.*
+import com.google.android.material.appbar.CollapsingToolbarLayout
 
 
 @Suppress("DEPRECATION")
@@ -43,6 +45,7 @@ class DetailMoviesFragment : Fragment() {
     private lateinit var bt_trailer: Button
     private lateinit var scroll_view: ScrollView
     private lateinit var progress_bar_load: ProgressBar
+    private lateinit var image_back: ImageView
 
     private lateinit var adapter: CastMovieAdapter
 
@@ -63,6 +66,11 @@ class DetailMoviesFragment : Fragment() {
         imageViewStarOn = view.findViewById(R.id.iv_start_on_detal_movies_fragment)
         textViewStillUpdate = view.findViewById(R.id.tv_still_update_details_movies_framgnet)
         bt_trailer = view.findViewById(R.id.bt_trailer_video_detals_movies_fragment)
+        image_back = view.findViewById(R.id.iv_back_details_movies_fragment)
+
+        image_back.setOnClickListener {
+            this.findNavController().popBackStack()
+        }
 
         recyclerView.layoutManager = LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL, false)
 
